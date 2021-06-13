@@ -1,0 +1,16 @@
+# Tecnológico de Costa Rica 
+# Escuela de Computación
+# Carrera: Ingeniería en Computación
+
+# Curso: Taller de Programación     
+# Grupo: 05
+# Profesor: William Mata Rodríguez
+# Semestre: I 2021
+
+# Autor: Kevin Vinicio Núñez Cruz
+# Fecha de Inicio: 12 de Junio del 2021
+# Fecha de Entrega: 29 de Junio del 2021
+
+Se decide iniciar con la programación del proyecto con base a los botones y la búsqueda de partidas en nivel fácil, intermedio y díficil.
+Hora de inicio: 5:10pm
+Hora de finalización: 7:30pm
