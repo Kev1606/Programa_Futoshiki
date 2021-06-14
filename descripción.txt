@@ -11,6 +11,13 @@
 # Fecha de Inicio: 12 de Junio del 2021
 # Fecha de Entrega: 29 de Junio del 2021
 
-Se decide iniciar con la programación del proyecto con base a los botones y la búsqueda de partidas en nivel fácil, intermedio y díficil.
+Se decide iniciar con la programación del proyecto con base al menú, los botones y la búsqueda de partidas en nivel fácil, intermedio y díficil.
 Hora de inicio: 5:10pm
 Hora de finalización: 7:30pm
+
+Se avanzo con la colocación de todos los botones aún sin funcionalidad 
+# Proxima: - investigar como ocultar los botones y mostrarlos según la configuración
+           - realizar la colocación del cuadro de juego y realizar las partidas en el .dat
+           - arreglar el radiobutton de la configuración que no está tomando los valores
+Hora de inicio: 3:00pm
+Hora de finalización: 6:40pm
