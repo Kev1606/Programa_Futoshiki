@@ -78,7 +78,7 @@ class Temporizador:
             # when temp value = 0; then a messagebox pop's up
             # with a message:"Time's up"
             if (self.temp == 0):
-                self.messagebox.showinfo("Time Countdown", "Time's up ")
+                messagebox.showinfo("Time Countdown", "Time's up ")
                 
             # after every one sec the value of temp will be decremented
             # by one
