@@ -21,6 +21,7 @@ class Futoshiki(tk.Frame):
         self.relojConfig.set('1')
         self.PosicionNumeros = tk.IntVar()
         self.PosicionNumeros.set('1')
+        self.configuraciones = (self.nivelJuego.get(),self.relojConfig.get(),self.PosicionNumeros.get())
 
         #TEMPORIZADOR VARIABLES
         self.hour=tk.StringVar()
@@ -41,15 +42,19 @@ class Futoshiki(tk.Frame):
         self.barMenu.add_command(label='Acerca De',command=self.acercaDe)
         self.barMenu.add_command(label='Salir',command=self.salir)
         self.master.config(menu=self.barMenu)
+
+    def configurar(self):
+        configurar = Configuracion(self.master)
+        self.configuraciones = configurar.configuraciones()
     
     def juego(self):
-        nivelJuego = self.nivelJuego.get()
-        if nivelJuego == 1:
-            self.lblNivelJuego = tk.Label(self.master,text='NIVEL FÁCIL', font=('System',16)).pack(fill=tk.X)
-        elif nivelJuego == 2:
-            self.lblNivelJuego = tk.Label(self.master,text='NIVEL INTERMEDIO', font=('System',16)).pack(fill=tk.X)
-        elif nivelJuego == 3:
-            self.lblNivelJuego = tk.Label(self.master,text='NIVEL DÍFICIL', font=('System',16)).pack(fill=tk.X)
+        #CONFIGURACION DEL NIVEL DE JUEGO
+        if self.configuraciones[0] == 1:
+            self.lblNivelJuego = tk.Label(self.master,text='NIVEL FÁCIL', font=('System',16)).place(x=250,y=50)
+        elif self.configuraciones[0] == 2:
+            self.lblNivelJuego = tk.Label(self.master,text='NIVEL INTERMEDIO', font=('System',16)).place(x=250,y=50)
+        elif self.configuraciones[0] == 3:
+            self.lblNivelJuego = tk.Label(self.master,text='NIVEL DÍFICIL', font=('System',16)).place(x=250,y=50)
         
         self.lblNombre = tk.Label(self.master,text='Nombre del jugador',font=('System',12)).place(x=10,y=60)
         self.txtNombre = tk.Entry(self.master,width=50,font=('System',12)).place(x=150,y=60)
@@ -59,8 +64,16 @@ class Futoshiki(tk.Frame):
         self.btnBorraJuego = tk.Button(self.master,text='BORRAR JUEGO',bg='white',font=('System',10)).place(x=405,y=450)
         self.btnTopLevel = tk.Button(self.master,text='TOP 10',bg='yellow',font=('System',10)).place(x=535,y=450)
 
-        posicion = self.PosicionNumeros.get()
-        if posicion == 1:
+        #CONFIGURACION DEL RELOJ
+        if self.configuraciones[1] == 1:
+            pass
+        elif self.configuraciones[1] == 2:
+            pass
+        else:
+            pass
+    
+        #CONFIGURACION DE LA POSICION DE LOS BOTONES
+        if self.configuraciones[2] == 1:
             #BOTONES DEL JUEGO
             self.btn1 = tk.Button(self.master,text='1',font=('System',12),activebackground='green',height=2,width=4).place(x=50,y=120)
             self.btn2 = tk.Button(self.master,text='2',font=('System',12),activebackground='green',height=2,width=4).place(x=50,y=170)
@@ -152,84 +165,12 @@ class Futoshiki(tk.Frame):
             # by one
             self.temp -= 1
 
-    def configurar(self):
-        self.ventanaConfigurar = tk.Tk()
-        self.ventanaConfigurar.geometry('500x300')
-        self.ventanaConfigurar.title('Configuración')
-
-        self.lblTitulo = tk.Label(self.ventanaConfigurar,text='FUTOSHIKI',fg='white',bg='red',font=('System',20)).pack(fill=tk.X) 
-        self.lblNivel = tk.Label(self.ventanaConfigurar,text='Nivel:',font=('System',12)).place(x=10,y=45)
-
-        self.chkFacil = tk.Radiobutton(self.ventanaConfigurar,text="Fácil",font=('System',12),value = 1, variable=self.nivelJuego \
-                                                    ,command=self.radioNivelJuego\
-                                                    ).place(x=55,y=45)
-
-        self.chkIntermedio = tk.Radiobutton(self.ventanaConfigurar,text="Intermedio",font=('System',12),value = 2, variable=self.nivelJuego \
-                                                    ,command=self.radioNivelJuego\
-                                                    ).place(x=55,y=65)
-
-        self.chkDificil = tk.Radiobutton(self.ventanaConfigurar,text="Díficil", font=('System',12), value = 3, variable=self.nivelJuego \
-                                                    ,command=self.radioNivelJuego\
-                                                    ).place(x=55,y=85)
-
-
-        self.lblReloj = tk.Label(self.ventanaConfigurar,text='Reloj:',font=('System',12)).place(x=10,y=115)
-
-        self.chkConTiempo = tk.Radiobutton(self.ventanaConfigurar,text="Si", font=('System',12), value = 1, variable=self.relojConfig \
-                                                    ,command=self.radioTemporizador\
-                                                    ).place(x=55,y=115)
-
-        self.chkSinTiempo = tk.Radiobutton(self.ventanaConfigurar,text="No", font=('System',12), value = 2, variable=self.relojConfig \
-                                                    ,command=self.radioTemporizador\
-                                                    ).place(x=55,y=135)
-
-        self.chkTimer = tk.Radiobutton(self.ventanaConfigurar,text="Timer", font=('System',12), value = 3, variable=self.relojConfig \
-                                                    ,command=self.radioTemporizador\
-                                                    ).place(x=55,y=155)
-        
-
-        self.lblPosicionDigitos = tk.Label(self.ventanaConfigurar,text='Posición en la ventana del panel de dígitos:',font=('System',12)).place(x=10,y=185)
-
-        self.chkDerecha = tk.Radiobutton(self.ventanaConfigurar,text="Derecha", font=('System',12), value = 1, variable=self.PosicionNumeros \
-                                                    ,command=self.PosicionamientoNumeros\
-                                                    ).place(x=300,y=185)
-
-        self.chkIzquierda = tk.Radiobutton(self.ventanaConfigurar,text="Izquierda", font=('System',12), value = 2, variable=self.PosicionNumeros \
-                                                    ,command=self.PosicionamientoNumeros\
-                                                    ).place(x=300,y=205)
-
-    #ERROR NO FUNCIONA
-    # EL VALOR SIEMPRE DA CERO
-    def radioNivelJuego(self):
-        nivelJuego = self.nivelJuego.get()
-        print(self.nivelJuego.get())
-        if nivelJuego == 1:
-            self.ventanaConfigurar.configure(bg='green')
-        elif nivelJuego == 2:
-            self.ventanaConfigurar.configure(bg='yellow')
-        elif nivelJuego == 3:
-            self.ventanaConfigurar.configure(bg='red')
     def radioTemporizador(self):
         pass
     
     def PosicionamientoNumeros(self):
         pass
-    """
-        posicion = self.PosicionNumeros.get()
-        if posicion == 1:
-            #BOTONES DEL JUEGO
-            self.btn1 = tk.Button(self.master,text='1',font=('System',12),activebackground='green').place(x=250,y=120)
-            self.btn2 = tk.Button(self.master,text='2',font=('System',12),activebackground='green').place(x=250,y=160)
-            self.btn3 = tk.Button(self.master,text='3',font=('System',12),activebackground='green').place(x=250,y=200)
-            self.btn4 = tk.Button(self.master,text='4',font=('System',12),activebackground='green').place(x=250,y=240)
-            self.btn5 = tk.Button(self.master,text='5',font=('System',12),activebackground='green').place(x=250,y=280)
-        else:
-            self.btn1 = tk.Button(self.master,text='1',font=('System',12),activebackground='green').place(x=50,y=120)
-            self.btn2 = tk.Button(self.master,text='2',font=('System',12),activebackground='green').place(x=50,y=160)
-            self.btn3 = tk.Button(self.master,text='3',font=('System',12),activebackground='green').place(x=50,y=200)
-            self.btn4 = tk.Button(self.master,text='4',font=('System',12),activebackground='green').place(x=50,y=240)
-            self.btn5 = tk.Button(self.master,text='5',font=('System',12),activebackground='green').place(x=50,y=280)
-    """
+
     def ayuda(self):
         pass
         #path = ''
@@ -253,6 +194,70 @@ class Futoshiki(tk.Frame):
         respuesta= messagebox.askyesno("Cuidado", "¿Quiere salir del programa?")
         if respuesta==True:
             self.master.destroy()
+
+class Configuracion:
+    def __init__(self,master):
+        self.ventanaConfigurar = tk.Toplevel(master)
+        self.ventanaConfigurar.geometry('500x300')
+        self.ventanaConfigurar.title('Configuración')
+        self.lblTitulo = tk.Label(self.ventanaConfigurar,text='FUTOSHIKI',fg='white',bg='red',font=('System',20)).pack(fill=tk.X)
+
+        self.nivelJuego = tk.IntVar()
+        self.nivelJuego.set('1')
+
+        self.lblJuego = tk.Label(self.ventanaConfigurar,text='Nivel:',font=('System',12)).place(x=10,y=45)
+        self.check1 = tk.Radiobutton(self.ventanaConfigurar,text="Fácil", font=('System',12),value = 1, variable=self.nivelJuego \
+                                                            , command=self.configuraciones \
+                                                            ).place(x=55,y=45)
+
+        self.check2 = tk.Radiobutton(self.ventanaConfigurar,text="Intermedio", font=('System',12),value = 2, variable=self.nivelJuego \
+                                                            ,command=self.configuraciones \
+                                                            ).place(x=55,y=65)
+
+        self.check3 = tk.Radiobutton(self.ventanaConfigurar,text="Díficil",font=('System',12), value = 3, variable=self.nivelJuego \
+                                                            ,command=self.configuraciones \
+                                                            ).place(x=55,y=85)
+
+        self.relojConfig = tk.IntVar()
+        self.relojConfig.set('1')
+
+        self.lblReloj = tk.Label(self.ventanaConfigurar,text='Reloj:',font=('System',12)).place(x=10,y=115)
+        self.chkConTiempo = tk.Radiobutton(self.ventanaConfigurar,text="Si", font=('System',12), value = 1, variable=self.relojConfig \
+                                                    ,command=self.configuraciones\
+                                                    ).place(x=55,y=115)
+
+        self.chkSinTiempo = tk.Radiobutton(self.ventanaConfigurar,text="No", font=('System',12), value = 2, variable=self.relojConfig \
+                                                    ,command=self.configuraciones\
+                                                    ).place(x=55,y=135)
+
+        self.chkTimer = tk.Radiobutton(self.ventanaConfigurar,text="Timer", font=('System',12), value = 3, variable=self.relojConfig \
+                                                    ,command=self.configuraciones\
+                                                    ).place(x=55,y=155)
+        
+
+        self.PosicionNumeros = tk.IntVar()
+        self.PosicionNumeros.set('1')
+
+        self.lblPosicionDigitos = tk.Label(self.ventanaConfigurar,text='Posición en la ventana del panel de dígitos:',font=('System',12)).place(x=10,y=185)
+        self.chkDerecha = tk.Radiobutton(self.ventanaConfigurar,text="Derecha", font=('System',12), value = 1, variable=self.PosicionNumeros \
+                                                    ,command=self.configuraciones\
+                                                    ).place(x=300,y=185)
+
+        self.chkIzquierda = tk.Radiobutton(self.ventanaConfigurar,text="Izquierda", font=('System',12), value = 2, variable=self.PosicionNumeros \
+                                                    ,command=self.configuraciones\
+                                                    ).place(x=300,y=205)
+
+        self.btnAceptar = tk.Button(self.ventanaConfigurar,text='Aceptar',command=self.confirmar).place(x=35,y=235)
+
+    def configuraciones(self):
+        self.ventanaConfigurar.wait_window()
+        nivelJuego = self.nivelJuego.get()
+        relojConfig = self.relojConfig.get()
+        PosicionNumeros = self.PosicionNumeros.get()
+        return (nivelJuego,relojConfig,PosicionNumeros)
+
+    def confirmar(self):
+        self.ventanaConfigurar.destroy()
 
 def main():
     app = tk.Tk()
