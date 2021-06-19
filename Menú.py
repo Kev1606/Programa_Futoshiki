@@ -49,21 +49,14 @@ class Futoshiki(tk.Frame):
     
     def juego(self):
         #CONFIGURACION DEL NIVEL DE JUEGO
-        self.lblNivelJuego1 = tk.Label(self.master,text='NIVEL FÁCIL', font=('System',16))
-        self.lblNivelJuego1.place(x=250,y=40)
-        self.lblNivelJuego2 = tk.Label(self.master,text='NIVEL INTERMEDIO', font=('System',16))
-        self.lblNivelJuego2.place(x=250,y=40)
-        self.lblNivelJuego3 = tk.Label(self.master,text='NIVEL DÍFICIL', font=('System',16))
-        self.lblNivelJuego3.place(x=250,y=40)
+        self.lblNivelJuego = tk.Label(self.master,text='NIVEL FÁCIL', font=('System',16))
+        self.lblNivelJuego.place(x=250,y=40)
         if self.configuraciones[0] == 1:
-            self.lblNivelJuego2.place_forget()
-            self.lblNivelJuego3.place_forget()
+            pass
         elif self.configuraciones[0] == 2:
-            self.lblNivelJuego1.place_forget()
-            self.lblNivelJuego3.place_forget()
+            self.lblNivelJuego.configure(text="NIVEL INTERMEDIO")
         elif self.configuraciones[0] == 3:
-            self.lblNivelJuego2.place_forget()
-            self.lblNivelJuego1.place_forget()
+            self.lblNivelJuego.configure(text="NIVEL DÍFICIL")
         
         self.lblNombre = tk.Label(self.master,text='Nombre del jugador',font=('System',12)).place(x=10,y=60)
         self.txtNombre = tk.Entry(self.master,width=50,font=('System',12)).place(x=150,y=60)
@@ -93,28 +86,15 @@ class Futoshiki(tk.Frame):
         self.btn4.place(x=530,y=270)
         self.btn5 = tk.Button(self.master,text='5',font=('System',12),activebackground='green',height=2,width=4)
         self.btn5.place(x=530,y=320)
-        self.btn11 = tk.Button(self.master,text='1',font=('System',12),activebackground='green',height=2,width=4)
-        self.btn11.place(x=50,y=120)
-        self.btn22= tk.Button(self.master,text='2',font=('System',12),activebackground='green',height=2,width=4)
-        self.btn22.place(x=50,y=170)
-        self.btn33 = tk.Button(self.master,text='3',font=('System',12),activebackground='green',height=2,width=4)
-        self.btn33.place(x=50,y=220)
-        self.btn44 = tk.Button(self.master,text='4',font=('System',12),activebackground='green',height=2,width=4)
-        self.btn44.place(x=50,y=270)
-        self.btn55 = tk.Button(self.master,text='5',font=('System',12),activebackground='green',height=2,width=4)
-        self.btn55.place(x=50,y=320)
+        
         if self.configuraciones[2] == 1:
-            self.btn11.place_forget()
-            self.btn22.place_forget()
-            self.btn33.place_forget()
-            self.btn44.place_forget()
-            self.btn55.place_forget()
+            pass
         else:
-            self.btn1.place_forget()
-            self.btn2.place_forget()
-            self.btn3.place_forget()
-            self.btn4.place_forget()
-            self.btn5.place_forget()
+            self.btn1.place_configure(x=50,y=120)
+            self.btn2.place_configure(x=50,y=170)
+            self.btn3.place_configure(x=50,y=220)
+            self.btn4.place_configure(x=50,y=270)
+            self.btn5.place_configure(x=50,y=320)
 
         self.btnGuardarJuego = tk.Button(self.master,text='GUARDAR JUEGO',font=('System',10)).place(x=305,y=525)
         self.btnCargarJuego = tk.Button(self.master,text='CARGAR JUEGO',font=('System',10)).place(x=445,y=525)
