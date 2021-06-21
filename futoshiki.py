@@ -1,5 +1,6 @@
 import os
 import time
+import pickle
 import tkinter as tk
 from functools import partial
 
@@ -11,6 +12,57 @@ class Futoshiki(tk.Frame):
         self.master =  master
         self.master.title('Futoshiki')
         self.master.geometry('600x600')
+
+        #PARTIDAS DE JUEGO
+        self.partidas= open('futoshiki2021partidas.dat','wb')
+        pickle.dump([[(('5',0,1),('4',0,4),
+        ('4',1,0),('>',1,2),('v',1,1),('v',1,2),
+        ('>',2,3),
+        ('<',3,2),('<',3,3),('3',3,4),('v',3,0),
+        ('3',4,2)),
+        (('>',0,3),('v',0,3),
+        ('<',1,1),('5',1,4),('v',1,0),
+        ('5',2,3),('ʌ',2,0),('v',2,4),
+        ('3',3,1),('<',3,1),('5',3,2),('>',3,3),
+        ('>',4,2),('4',4,3)),
+        (('>',0,0),('2',0,4),('v',0,1),('v',0,3),
+        ('4',1,2),('5',1,4),
+        ('5',2,2),('>',2,2),('1',2,4),('ʌ',2,3),
+        ('>',3,1),('>',3,3),
+        ('>',4,3),('4',4,4))
+        ]\
+        ,[(('1',0,2),('3',0,4),('ʌ',0,0),('ʌ',0,4),
+        ('3',1,0),('>',1,2),
+        ('2',2,4),('v',2,3),
+        ('4',3,2),('v',3,1),
+        ('>',4,0),('1',4,1),('>',4,2)),
+        (('5',0,0),('3',0,1),('4',0,3),('v',0,3),('ʌ',0,4),
+        ('<',1,3),('ʌ',1,2),
+        ('4',2,4),
+        ('1',3,0),('v',3,3),('ʌ',3,4),
+        ('<',4,0),('1',4,3)),
+        (('1',0,4),('ʌ',0,2),('ʌ',0,4),
+        ('5',1,3),('2',1,4),('ʌ',1,4),
+        ('>',2,0),('3',2,1),('<',2,2),('v',2,1),('ʌ',2,2),('v',2,3),
+        ('<',4,0),('>',4,1))
+        ]\
+        ,[(('1',0,3),('v',0,2),
+        ('2',1,4),('ʌ',1,1),('v',1,3),('ʌ',1,4),
+        ('<',2,0),('>',2,1),('ʌ',2,3),
+        ('1',3,0),('3',3,4),('ʌ',3,1),
+        ('<',4,0)),
+        (('2',0,1),('1',0,2),('4',0,4),
+        ('<',1,0),('>',1,2),('2',1,4),
+        ('1',2,1),('2',2,3),('3',2,4),
+        ('3',3,2),('v',3,3),
+        ('2',4,2),('<',4,2)),
+        (('3',0,3),('>',0,3),
+        ('3',1,0),('5',1,4),('ʌ',1,1),('v',1,2),
+        ('4',2,3),('ʌ',2,0),
+        ('>',3,0),('1',3,1),('v',3,4),
+        ('<',4,1),('5',4,2),('>',4,2))
+        ]],self.partidas)
+        self.partidas.close()
 
         self.inicializar_gui()
 
@@ -27,11 +79,14 @@ class Futoshiki(tk.Frame):
         self.hour=tk.StringVar()
         self.minute=tk.StringVar()
         self.second=tk.StringVar()
-
         #Se configura las variables en el valor default
         self.hour.set("00")
         self.minute.set("00")
         self.second.set("00")
+
+        self.configuracion = open('futoshiki2021configuracion.dat','wb')
+        pickle.dump([self.configuraciones],self.configuracion)
+        self.configuracion.close()
         
     def inicializar_gui(self):
         self.lblTitulo = tk.Label(self.master,text='FUTOSHIKI',fg='white',bg='red',font=('System',20)).pack(fill=tk.X) 
@@ -100,9 +155,13 @@ class Futoshiki(tk.Frame):
         self.btnCargarJuego = tk.Button(self.master,text='CARGAR JUEGO',font=('System',10)).place(x=445,y=525)
 
         #TEMPORIZADOR 
-        self.hourLabel = tk.Label(self.master,text='Horas',width=8,font=('System',12)).place(x=60,y=500)
-        self.minuteLabel = tk.Label(self.master,text='Minutos',width=8,font=('System',12)).place(x=117,y=500)
-        self.secondLabel = tk.Label(self.master,text='Segundos',width=8,font=('System',12)).place(x=185,y=500)
+        self.hourLabel = tk.Label(self.master,text='Horas',width=8,font=('System',12))
+        self.hourLabel.place(x=60,y=500)
+        self.minuteLabel = tk.Label(self.master,text='Minutos',width=8,font=('System',12))
+        self.minuteLabel.place(x=117,y=500)
+        self.secondLabel = tk.Label(self.master,text='Segundos',width=8,font=('System',12))
+        self.secondLabel.place(x=185,y=500)
+        
         # Use of Entry class to take input from the user
         self.hourEntry= tk.Entry(self.master, width=3, font=("System",18,""),
                         textvariable=self.hour)
@@ -233,7 +292,28 @@ class Configuracion:
         self.chkTimer = tk.Radiobutton(self.ventanaConfigurar,text="Timer", font=('System',12), value = 3, variable=self.relojConfig \
                                                     ,command=self.configuraciones\
                                                     ).place(x=55,y=155)
-        
+        #TEMPORIZADOR VARIABLES
+        self.hour=tk.StringVar()
+        self.minute=tk.StringVar()
+        self.second=tk.StringVar()
+        #Se configura las variables en el valor default
+        self.hour.set("00")
+        self.minute.set("00")
+        self.second.set("00")
+        self.hourLabel = tk.Label(self.ventanaConfigurar,text='Horas',width=8,font=('System',12)).place(x=285,y=110)
+        self.minuteLabel = tk.Label(self.ventanaConfigurar,text='Minutos',width=8,font=('System',12)).place(x=337,y=110)
+        self.secondLabel = tk.Label(self.ventanaConfigurar,text='Segundos',width=8,font=('System',12)).place(x=399,y=110)
+        self.hourEntry= tk.Entry(self.ventanaConfigurar, width=3, font=("System",18,""),
+                            textvariable=self.hour)
+        self.hourEntry.place(x=300,y=135)
+            
+        self.minuteEntry= tk.Entry(self.ventanaConfigurar, width=3, font=("System",18,""),
+                            textvariable=self.minute)
+        self.minuteEntry.place(x=350,y=135)
+            
+        self.secondEntry= tk.Entry(self.ventanaConfigurar, width=3, font=("System",18,""),
+                            textvariable=self.second)
+        self.secondEntry.place(x=400,y=135)
 
         self.PosicionNumeros = tk.IntVar()
         self.PosicionNumeros.set('1')
@@ -254,7 +334,15 @@ class Configuracion:
         nivelJuego = self.nivelJuego.get()
         relojConfig = self.relojConfig.get()
         PosicionNumeros = self.PosicionNumeros.get()
-        return (nivelJuego,relojConfig,PosicionNumeros)
+
+        hora = self.hour.get()
+        minuto = self.minute.get()
+        segundo = self.second.get()
+
+        self.configuracion = open('futoshiki2021configuracion.dat','wb')
+        pickle.dump((nivelJuego,relojConfig,PosicionNumeros,hora,minuto,segundo),self.configuracion)
+        self.configuracion.close()
+        return (nivelJuego,relojConfig,PosicionNumeros,hora,minuto,segundo)
 
     def confirmar(self):
         self.ventanaConfigurar.destroy()
