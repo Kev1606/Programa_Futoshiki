@@ -123,11 +123,42 @@ class Futoshiki(tk.Frame):
 
         #CONFIGURACION DEL RELOJ
         if self.configuraciones[1] == 1:
-            pass
+            self.hourLabel = tk.Label(self.master,text='Horas',width=8,font=('System',12))
+            self.hourLabel.place(x=60,y=500)
+            self.minuteLabel = tk.Label(self.master,text='Minutos',width=8,font=('System',12))
+            self.minuteLabel.place(x=117,y=500)
+            self.secondLabel = tk.Label(self.master,text='Segundos',width=8,font=('System',12))
+            self.secondLabel.place(x=185,y=500)
+            
+            self.time = tk.Label(self.master, text= '0:0:0', font=('System',25,''))
+            self.time.place(x=75,y=525)
+
         elif self.configuraciones[1] == 2:
             pass
         else:
-            pass
+            #TEMPORIZADOR 
+            self.hourLabel = tk.Label(self.master,text='Horas',width=8,font=('System',12))
+            self.hourLabel.place(x=60,y=500)
+            self.minuteLabel = tk.Label(self.master,text='Minutos',width=8,font=('System',12))
+            self.minuteLabel.place(x=117,y=500)
+            self.secondLabel = tk.Label(self.master,text='Segundos',width=8,font=('System',12))
+            self.secondLabel.place(x=185,y=500)
+            
+            # Use of Entry class to take input from the user
+            self.hourEntry= tk.Entry(self.master, width=3, font=("System",18,""),
+                            textvariable=self.hour)
+            self.hourEntry.place(x=80,y=525)
+            self.hour.set(self.configuraciones[3])
+            
+            self.minuteEntry= tk.Entry(self.master, width=3, font=("System",18,""),
+                            textvariable=self.minute)
+            self.minuteEntry.place(x=130,y=525)
+            self.minute.set(self.configuraciones[4])
+            
+            self.secondEntry= tk.Entry(self.master, width=3, font=("System",18,""),
+                            textvariable=self.second)
+            self.secondEntry.place(x=180,y=525)
+            self.second.set(self.configuraciones[5])
     
         #CONFIGURACION DE LA POSICION DE LOS BOTONES
                     #BOTONES DEL JUEGO
@@ -153,76 +184,72 @@ class Futoshiki(tk.Frame):
 
         self.btnGuardarJuego = tk.Button(self.master,text='GUARDAR JUEGO',font=('System',10)).place(x=305,y=525)
         self.btnCargarJuego = tk.Button(self.master,text='CARGAR JUEGO',font=('System',10)).place(x=445,y=525)
-
-        #TEMPORIZADOR 
-        self.hourLabel = tk.Label(self.master,text='Horas',width=8,font=('System',12))
-        self.hourLabel.place(x=60,y=500)
-        self.minuteLabel = tk.Label(self.master,text='Minutos',width=8,font=('System',12))
-        self.minuteLabel.place(x=117,y=500)
-        self.secondLabel = tk.Label(self.master,text='Segundos',width=8,font=('System',12))
-        self.secondLabel.place(x=185,y=500)
         
-        # Use of Entry class to take input from the user
-        self.hourEntry= tk.Entry(self.master, width=3, font=("System",18,""),
-                        textvariable=self.hour)
-        self.hourEntry.place(x=80,y=525)
-        
-        self.minuteEntry= tk.Entry(self.master, width=3, font=("System",18,""),
-                        textvariable=self.minute)
-        self.minuteEntry.place(x=130,y=525)
-        
-        self.secondEntry= tk.Entry(self.master, width=3, font=("System",18,""),
-                        textvariable=self.second)
-        self.secondEntry.place(x=180,y=525)
-
     #METODO PARA EL RELOJ E INICIA EL JUEGO
-    def inicioJuego(self):
-        try:
-            # la entrada proporcionada por el usuario es
-            # almacenado aquí: temp
-            self.temp = int(self.hour.get())*3600 + int(self.minute.get())*60 + int(self.second.get())
-        except:
-            print("Ingrese el valor correcto")
-        while self.temp >-1:
-            # divmod(firstvalue = temp//60, secondvalue = temp%60)
-            self.mins,self.secs = divmod(self.temp,60)
-        
-            # Conversión de la entrada ingresada en minutos o segundos a horas, minutos, segundos 
-            # (input = 110 min --> 120*60 = 6600 => 1hr :
-            # 50min: 0sec)
-            self.hours=0
-            if self.mins >60:
+    def inicioJuego(self,h=0,m=0,s=0):
+        global proceso
+        if self.configuraciones[1] == 3:
+            try:
+                # la entrada proporcionada por el usuario es
+                # almacenado aquí: temp
+                self.temp = int(self.hour.get())*3600 + int(self.minute.get())*60 + int(self.second.get())
+            except:
+                print("Ingrese el valor correcto")
+            while self.temp >-1:
+                # divmod(firstvalue = temp//60, secondvalue = temp%60)
+                self.mins,self.secs = divmod(self.temp,60)
+            
+                # Conversión de la entrada ingresada en minutos o segundos a horas, minutos, segundos 
+                # (input = 110 min --> 120*60 = 6600 => 1hr :
+                # 50min: 0sec)
+                self.hours=0
+                if self.mins >60:
+                        
+                    # divmod(firstvalue = temp//60, secondvalue
+                    # = temp%60)
+                    self.hours, self.mins = divmod(self.mins, 60)
                     
-                # divmod(firstvalue = temp//60, secondvalue
-                # = temp%60)
-                self.hours, self.mins = divmod(self.mins, 60)
-                
-            # usando el método format () para almacenar el valor hasta dos lugares decimales
-            self.hour.set("{0:2d}".format(self.hours))
-            self.minute.set("{0:2d}".format(self.mins))
-            self.second.set("{0:2d}".format(self.secs))
+                # usando el método format () para almacenar el valor hasta dos lugares decimales
+                self.hour.set("{0:2d}".format(self.hours))
+                self.minute.set("{0:2d}".format(self.mins))
+                self.second.set("{0:2d}".format(self.secs))
+            
+                # actualizar la ventana de la GUI después de disminuir el 
+                # valor del temp cada vez 
+                self.master.update()
+                time.sleep(1)
+            
+                # cuando valor de temp = 0; luego aparece un cuadro de mensaje
+                # con el mensaje: "Tiempo Expirado" y consulta al usuario si desea continuar
+                if (self.temp == 0):
+                    respuesta= messagebox.askyesno("Tiempo Expirado", "¿Desea continuar el mismo juego?")
+                    if respuesta==True:
+                        # Si  responde  SI  entonces  el timer pasa a ser reloj inicializado con el tiempo que se había establecido en 
+                        # el  timer.  Por  ejemplo  si  el  timer  estaba  para  1  hora  y  30  minutos,  ahora  el 
+                        # reloj debe marcar que ya ha pasado 1 hora y 30 minutos y sigue contando el tiempo.
+                        pass
+                    else:
+                        #Si responde NO el juego finaliza regresando a la opción de Jugar
+                        pass
+                    
+                # after every one sec the value of temp will be decremented
+                # by one
+                self.temp -= 1
+        elif self.configuraciones[1] == 1:
+            if s >= 60:
+                s = 0
+                m = m + 1
+                if m >= 60:
+                    m = 0
+                    h = h + 1
+                    if h >= 24:
+                        h = 0
         
-            # actualizar la ventana de la GUI después de disminuir el 
-            # valor del temp cada vez 
-            self.master.update()
-            time.sleep(1)
+            #etiqueta que muestra el cronometro en pantalla
+            self.time['text'] = str(h)+":"+str(m)+":"+str(s)
         
-            # cuando valor de temp = 0; luego aparece un cuadro de mensaje
-            # con el mensaje: "Tiempo Expirado" y consulta al usuario si desea continuar
-            if (self.temp == 0):
-                respuesta= messagebox.askyesno("Tiempo Expirado", "¿Desea continuar el mismo juego?")
-                if respuesta==True:
-                    # Si  responde  SI  entonces  el timer pasa a ser reloj inicializado con el tiempo que se había establecido en 
-                    # el  timer.  Por  ejemplo  si  el  timer  estaba  para  1  hora  y  30  minutos,  ahora  el 
-                    # reloj debe marcar que ya ha pasado 1 hora y 30 minutos y sigue contando el tiempo.
-                    pass
-                else:
-                    #Si responde NO el juego finaliza regresando a la opción de Jugar
-                    pass
-                
-            # after every one sec the value of temp will be decremented
-            # by one
-            self.temp -= 1
+            # iniciamos la cuenta progresiva de los segundos
+            proceso=self.time.after(1000, self.inicioJuego, (h), (m), (s + 1))
 
     def radioTemporizador(self):
         pass
@@ -346,6 +373,8 @@ class Configuracion:
 
     def confirmar(self):
         self.ventanaConfigurar.destroy()
+
+proceso=0
 
 def main():
     app = tk.Tk()
