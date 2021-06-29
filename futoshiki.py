@@ -946,9 +946,8 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
 ##################################################################################################################################################
     def ayuda(self):
         # Esta opción la usaremos para que el usuario pueda ver el Manual de Usuario directamente en la computadora (despliega el pdf  respectivo). 
-        pass
-        #path = ''
-        #os.system(path)
+        path = 'manual_de_usuario_futoshiki.pdf'
+        os.system(path)
 ###################################################################################################################################################
     def acercaDe(self):
         self.ventanaInfo = tk.Tk()
