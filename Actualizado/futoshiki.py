@@ -114,29 +114,29 @@ class Configuracion:
         relojConfig = self.relojConfig.get()
         PosicionNumeros = self.PosicionNumeros.get()
 
-        hora = self.hour.get()
-        minuto = self.minute.get()
-        segundo = self.second.get()
+        self.hora = self.hour.get()
+        self.minuto = self.minute.get()
+        self.segundo = self.second.get()
 
-        secondAux = segundo
-        minuteAux = minuto
-        hourAux = hora
+        secondAux = self.segundo
+        minuteAux = self.minuto
+        hourAux = self.hora
 
         self.configuracion = open('futoshiki2021configuracion.dat','wb')    #se abre el archivo para guardar la configuración
-        pickle.dump((nivelJuego,relojConfig,PosicionNumeros,hora,minuto,segundo),self.configuracion)#se graban las variables cada vez que se ingrese a la ventana Configuración
+        pickle.dump((nivelJuego,relojConfig,PosicionNumeros,self.hora,self.minuto,self.segundo),self.configuracion)#se graban las variables cada vez que se ingrese a la ventana Configuración
         self.configuracion.close()
-        return (nivelJuego,relojConfig,PosicionNumeros,hora,minuto,segundo,hourAux,minuteAux,secondAux)     #retorna las variables
+        return (nivelJuego,relojConfig,PosicionNumeros,self.hora,self.minuto,self.segundo,hourAux,minuteAux,secondAux)     #retorna las variables
 ####################################################################################################################################################
     def confirmar(self):
         if int(self.relojConfig.get()) == 3:
             try:
-                    s = int(self.secondEntry.get())
-                    m = int(self.minuteEntry.get())
-                    h = int(self.hourEntry.get())
+                    self.segundoReloj = int(self.secondEntry.get())
+                    self.minutoReloj = int(self.minuteEntry.get())
+                    self.horaReloj = int(self.hourEntry.get())
 
-                    if s <= 59 and m <= 59 and h <= 2:
+                    if self.segundoReloj <= 59 and self.minutoReloj <= 59 and self.horaReloj <= 2:
 
-                        if s > 0 or m > 0 or h > 0:
+                        if self.segundoReloj > 0 or self.minutoReloj > 0 or self.horaReloj > 0:
                             self.ventanaConfigurar.destroy()
                         else:
                             messagebox.showinfo("Tiempo Incorrecto","Por favor ingresar un intervalo de tiempo correcto")
@@ -179,7 +179,7 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 ("2",1,1),("v",2,0),
                 (">",3,0),("ʌ",3,2),
                 (">",4,1)),
-                (("3",0,0),("v",0,0),("4",0,1),("˅",1,3),("˄",1,4),
+                (("3",0,0),("v",0,0),("4",0,1),("v",1,3),("ʌ",1,4),
                 (">",2,3),("2",2,4),(">",4,3)),
                 (("5",0,0),("<",0,1),
                 ("ʌ",1,0),("3",1,3),
@@ -190,7 +190,7 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 (("2",0,0),("v",0,4),
                 ("v",1,0),("<",1,1),
                 ("5",2,1),("<",2,3),
-                (">",3,0),("˅",3,3),
+                (">",3,0),("v",3,3),
                 ("1",4,2)),
                 ((">",0,1),("4",0,3),("ʌ",0,3),
                 (">",1,0),("4",1,4),
@@ -215,54 +215,6 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
         self.PosicionNumeros.set('1')
         self.configuraciones = (self.nivelJuego.get(),self.relojConfig.get(),self.PosicionNumeros.get())    #se crea una lista que guarde la configuración por default 
 
-        self.valor00 = 0
-        self.valor01 = 0
-        self.valor02 = 0
-        self.valor03 = 0
-        self.valor04 = 0
-
-        self.valor10 = 0
-        self.valor11 = 0
-        self.valor12 = 0
-        self.valor13 = 0
-        self.valor14 = 0
-
-        self.valor20 = 0
-        self.valor21 = 0
-        self.valor22 = 0
-        self.valor23 = 0
-        self.valor24 = 0
-
-        self.valor30 = 0
-        self.valor31 = 0
-        self.valor32 = 0
-        self.valor33 = 0
-        self.valor34 = 0
-
-        self.valor40 = 0
-        self.valor41 = 0
-        self.valor42 = 0
-        self.valor43 = 0
-        self.valor44 = 0
-
-        self.valoresH = [[self.valor00,self.valor01,self.valor02,self.valor03,self.valor04],\
-                      [self.valor10,self.valor11,self.valor12,self.valor13,self.valor14],\
-                      [self.valor20,self.valor21,self.valor22,self.valor23,self.valor24],\
-                      [self.valor30,self.valor31,self.valor32,self.valor33,self.valor34],\
-                      [self.valor40,self.valor41,self.valor42,self.valor43,self.valor44]]
-
-        self.valoresV = [[self.valor00,self.valor10,self.valor20,self.valor30,self.valor40],\
-                      [self.valor01,self.valor11,self.valor21,self.valor31,self.valor41],\
-                      [self.valor02,self.valor12,self.valor22,self.valor32,self.valor42],\
-                      [self.valor03,self.valor13,self.valor23,self.valor33,self.valor43],\
-                      [self.valor04,self.valor14,self.valor24,self.valor34,self.valor44]]
-
-        self.signoRestriccionesH = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
-    
-        self.signoRestriccionesV = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
-    
-        self.matrizResultados = []
-
         #TEMPORIZADOR VARIABLES
         self.flag = False
 
@@ -274,14 +226,22 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
         self.minute.set("00")
         self.second.set("00")
 
+        self.segundoReloj = 0
+        self.minutoReloj = 0
+        self.horaReloj = 0
+
+        #LISTAS PARA EL TOP 10 SEGÚN LA DIFICULTAD DE JUEGO
         self.Top10Facil = []
         self.Top10Intermedio = []
         self.Top10Dificil = []
 
-
-        self.configuracion = open('futoshiki2021configuracion.dat','wb')
-        pickle.dump(self.configuraciones,self.configuracion)    #grabo la configuración en el archivo .dat
-        self.configuracion.close()
+        try:
+            leerConfig = open('futoshiki2021configuracion.dat','rb')
+            leerConfig.close()
+        except:
+            self.configuracion = open('futoshiki2021configuracion.dat','wb')
+            pickle.dump(self.configuraciones,self.configuracion)    #grabo la configuración en el archivo .dat
+            self.configuracion.close()
 ###################################################################################################################################################      
     def inicializar_gui(self):
         self.lblTitulo = tk.Label(self.master,text='FUTOSHIKI',fg='white',bg='red',font=('System',20)).pack(fill=tk.X)
@@ -299,6 +259,25 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
         self.configuraciones = configurar.configuraciones()     #en esta variable se guarda lo que se retorna de la clase 
 ###################################################################################################################################################  
     def juego(self):
+
+        self.valoresH = [[0,0,0,0,0],\
+                         [0,0,0,0,0],\
+                         [0,0,0,0,0],\
+                         [0,0,0,0,0],\
+                         [0,0,0,0,0]]
+
+        self.valoresV = [[0,0,0,0,0],\
+                         [0,0,0,0,0],\
+                         [0,0,0,0,0],\
+                         [0,0,0,0,0],\
+                         [0,0,0,0,0]]
+
+        self.signoRestriccionesH = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
+    
+        self.signoRestriccionesV = [[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
+    
+        self.matrizResultados = []
+
         # CONFIGURACION DEL NIVEL DE JUEGO #
         self.lblNivelJuego = tk.Label(self.master,text='NIVEL FÁCIL', font=('System',16),width=50)
         self.lblNivelJuego.place(x=100,y=40)
@@ -322,59 +301,59 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
         self.btnTopLevel.place(x=535,y=450)
 
 ################################################ CUADRICULA ######################################################################################
-        self.btnPos00 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_0x0)
+        self.btnPos00 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula0x0)
         self.btnPos00.place(x=130,y=100)
-        self.btnPos01 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_0x1)
+        self.btnPos01 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula0x1)
         self.btnPos01.place(x=200,y=100)
-        self.btnPos02 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_0x2)
+        self.btnPos02 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula0x2)
         self.btnPos02.place(x=270,y=100)
-        self.btnPos03 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_0x3)
+        self.btnPos03 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula0x3)
         self.btnPos03.place(x=340,y=100)
-        self.btnPos04 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_0x4)
+        self.btnPos04 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula0x4)
         self.btnPos04.place(x=410,y=100)
 
-        self.btnPos10 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_1x0)
+        self.btnPos10 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula1x0)
         self.btnPos10.place(x=130,y=170)
-        self.btnPos11 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_1x1)
+        self.btnPos11 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula1x1)
         self.btnPos11.place(x=200,y=170)
-        self.btnPos12 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_1x2)
+        self.btnPos12 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula1x2)
         self.btnPos12.place(x=270,y=170)
-        self.btnPos13 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_1x3)
+        self.btnPos13 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula1x3)
         self.btnPos13.place(x=340,y=170)
-        self.btnPos14 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_1x4)
+        self.btnPos14 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula1x4)
         self.btnPos14.place(x=410,y=170)
 
-        self.btnPos20 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_2x0)
+        self.btnPos20 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula2x0)
         self.btnPos20.place(x=130,y=240)
-        self.btnPos21 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_2x1)
+        self.btnPos21 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula2x1)
         self.btnPos21.place(x=200,y=240)
-        self.btnPos22 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_2x2)
+        self.btnPos22 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula2x2)
         self.btnPos22.place(x=270,y=240)
-        self.btnPos23 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_2x3)
+        self.btnPos23 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula2x3)
         self.btnPos23.place(x=340,y=240)
-        self.btnPos24 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_2x4)
+        self.btnPos24 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula2x4)
         self.btnPos24.place(x=410,y=240)
 
-        self.btnPos30 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_3x0)
+        self.btnPos30 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula3x0)
         self.btnPos30.place(x=130,y=310)
-        self.btnPos31 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_3x1)
+        self.btnPos31 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula3x1)
         self.btnPos31.place(x=200,y=310)
-        self.btnPos32 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_3x2)
+        self.btnPos32 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula3x2)
         self.btnPos32.place(x=270,y=310)
-        self.btnPos33 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_3x3)
+        self.btnPos33 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula3x3)
         self.btnPos33.place(x=340,y=310)
-        self.btnPos34 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_3x4)
+        self.btnPos34 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula3x4)
         self.btnPos34.place(x=410,y=310)
 
-        self.btnPos40 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_4x0)
+        self.btnPos40 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula4x0)
         self.btnPos40.place(x=130,y=380)
-        self.btnPos41 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_4x1)
+        self.btnPos41 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula4x1)
         self.btnPos41.place(x=200,y=380)
-        self.btnPos42 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_4x2)
+        self.btnPos42 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula4x2)
         self.btnPos42.place(x=270,y=380)
-        self.btnPos43 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_4x3)
+        self.btnPos43 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula4x3)
         self.btnPos43.place(x=340,y=380)
-        self.btnPos44 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cambio_cuadricula_4x4)
+        self.btnPos44 = tk.Button(self.master,bg='white',font=('System'),width=5,height=2,command=self.cuadricula4x4)
         self.btnPos44.place(x=410,y=380)
 ###################################################################################################################################################
 
@@ -487,7 +466,9 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
         
         # EVALUA EL NIVEL DE JUEGO PARA CREAR LAS PARTIDAS DE JUEGO #
         # Partidas en nivel Fácil #
-        if self.configuraciones[0] == 1:
+        configure = open('futoshiki2021configuracion.dat','rb')    #se abre el archivo que guarda la configuración
+        configuracion = pickle.load(configure)                     #se cargan en la variable "configuracion"
+        if configuracion[0] == 1:
             self.lblNivelJuego.configure(text="NIVEL FÁCIL")
             partidas = open('futoshiki2021partidas.dat','rb')
             x = pickle.load(partidas)
@@ -515,7 +496,7 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                                                     self.signoRestriccionesH[i][op] = numeros[0]
             partidas.close()
         # Partidas en nivel Intermedio #
-        elif self.configuraciones[0] == 2:
+        elif configuracion[0] == 2:
             self.lblNivelJuego.configure(text="NIVEL INTERMEDIO")
             partidas = open('futoshiki2021partidas.dat','rb')
             x = pickle.load(partidas)
@@ -539,11 +520,15 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                                                     self.restriccionesV[i][op].configure(text=numeros[0])
                                                     self.signoRestriccionesV[i][op] = numeros[0]
                                                 else:
-                                                    self.restriccionesH[i][op].configure(text=numeros[0])
-                                                    self.signoRestriccionesH[i][op] = numeros[0]
+                                                    try:
+                                                        self.restriccionesH[i][op].configure(text=numeros[0])
+                                                        self.signoRestriccionesH[i][op] = numeros[0]
+                                                    except:
+                                                        pass
+
             partidas.close()
         # Partidas en nivel Díficil #
-        elif self.configuraciones[0] == 3:
+        elif configuracion[0] == 3:
             self.lblNivelJuego.configure(text="NIVEL DÍFICIL")
             partidas = open('futoshiki2021partidas.dat','rb')
             x = pickle.load(partidas)
@@ -573,10 +558,10 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
 
         # CONFIGURACION DEL RELOJ #
         # EVALUA LA CONFIGURACIÓN DEL RELOJ PARA AJUSTAR EN VENTANA PRINCIPAL EL RELOJ (TIMER, CRONÓMETRO O SIN RELOJ) #
-        if self.configuraciones[1] == 1:
+        if configuracion[1] == 1:
             # CRONÓMETRO #
-            self.time = tk.Label(self.master, text= 'Reloj',font=('System',20))
-            self.time.place(x=107,y=485)
+            self.time = tk.Label(self.master, text= 'RELOJ',font=('System',18))
+            self.time.place(x=102,y=488)
             self.hourLabel = tk.Label(self.master,text='00',font=('System',20))
             self.hourLabel.place(x=60,y=525)
             self.minuteLabel = tk.Label(self.master,text='00',font=('System',20))
@@ -584,14 +569,14 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
             self.secondLabel = tk.Label(self.master,text='00',font=('System',20))
             self.secondLabel.place(x=185,y=525)
         
-        elif self.configuraciones[1] == 2:
+        elif configuracion[1] == 2:
             # SIN RELOJ #
             self.lblOcultar = tk.Label(self.master,text='',width=40,height=10)
-            self.lblOcultar.place(x=60,y=500)
+            self.lblOcultar.place(x=60,y=488)
         else:
             # TEMPORIZADOR # 
-            self.time = tk.Label(self.master, text= 'Timer', font=('System',20))
-            self.time.place(x=107,y=485)
+            self.time = tk.Label(self.master, text= 'TIMER', font=('System',18))
+            self.time.place(x=102,y=488)
             self.hourLabel = tk.Label(self.master,text=self.configuraciones[3],font=('System',20))
             self.hourLabel.place(x=60,y=525)
             self.minuteLabel = tk.Label(self.master,text=self.configuraciones[4],font=('System',20))
@@ -601,15 +586,20 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
     
         # CONFIGURACION DE LA POSICION DE LOS BOTONES #
 ####################################################### BOTONES DE JUEGO ###########################################################################################
-        self.btn1 = tk.Button(self.master,text='1',font=('System',12),activebackground='green',height=2,width=4,command=lambda:self.botones(1),state=tk.DISABLED)
+        self.btn1 = tk.Button(self.master,text='1',font=('System',12),activebackground='green',height=2,width=4,command=lambda:self.botones(1,self.btn1,self.btn2,self.btn3,\
+                                                        self.btn4,self.btn5),state=tk.DISABLED)
         self.btn1.place(x=530,y=120)
-        self.btn2= tk.Button(self.master,text='2',font=('System',12),activebackground='green',height=2,width=4,command=lambda:self.botones(2),state=tk.DISABLED)
+        self.btn2= tk.Button(self.master,text='2',font=('System',12),activebackground='green',height=2,width=4,command=lambda:self.botones(2,self.btn2,self.btn1,self.btn3,\
+                                                        self.btn4,self.btn5),state=tk.DISABLED)
         self.btn2.place(x=530,y=170)
-        self.btn3 = tk.Button(self.master,text='3',font=('System',12),activebackground='green',height=2,width=4,command=lambda:self.botones(3),state=tk.DISABLED)
+        self.btn3 = tk.Button(self.master,text='3',font=('System',12),activebackground='green',height=2,width=4,command=lambda:self.botones(3,self.btn3,self.btn1,self.btn2,\
+                                                        self.btn4,self.btn5),state=tk.DISABLED)
         self.btn3.place(x=530,y=220)
-        self.btn4 = tk.Button(self.master,text='4',font=('System',12),activebackground='green',height=2,width=4,command=lambda:self.botones(4),state=tk.DISABLED)
+        self.btn4 = tk.Button(self.master,text='4',font=('System',12),activebackground='green',height=2,width=4,command=lambda:self.botones(4,self.btn4,self.btn1,self.btn2,\
+                                                        self.btn3,self.btn5),state=tk.DISABLED)
         self.btn4.place(x=530,y=270)
-        self.btn5 = tk.Button(self.master,text='5',font=('System',12),activebackground='green',height=2,width=4,command=lambda:self.botones(5),state=tk.DISABLED)
+        self.btn5 = tk.Button(self.master,text='5',font=('System',12),activebackground='green',height=2,width=4,command=lambda:self.botones(5,self.btn5,self.btn1,self.btn2,\
+                                                        self.btn3,self.btn4),state=tk.DISABLED)
         self.btn5.place(x=530,y=320)
 
         # LISTA CON LOS BOTONES DEL JUEGO #
@@ -640,107 +630,104 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
         self.btnCargarJuego.place(x=445,y=525)
 
 ###################################################################################################################################################
-    def botones(self,num):          #Método que almacena el botón de juego que se presiona
+    def botones(self,num,casillaP,casilla1,casilla2,casilla3,casilla4):          #Método que almacena el botón de juego que se presiona
         self.numero = str(num)      #y guarda el parámetro recibido en la variable "self.numero"
+        casillaP.configure(bg='green')
+        casilla1.configure(bg='white smoke')
+        casilla2.configure(bg='white smoke')
+        casilla3.configure(bg='white smoke')
+        casilla4.configure(bg='white smoke')
 
 ###################################################################################################################################################
-
     def temporizador(self):
-        
-        hora = int(self.configuraciones[3])
-        minuto = int(self.configuraciones[4])
-        segundo = int(self.configuraciones[5])
 
-        segundo -= 1
+        self.segundo -= 1
 
-        if segundo <= 0:
-            if minuto !=0:
-                segundo = 59
-                minuto -= 1
+        if self.segundo <= 0:
+            if self.minuto !=0:
+                self.segundo = 59
+                self.minuto -= 1
             else:
-                minuto = 0
-                segundo = 0
-                if minuto <= 0:
-                    if hora !=0:
-                        minuto = 59
-                        hora -= 1
+                self.minuto = 0
+                self.segundo = 0
+                if self.minuto <= 0:
+                    if self.hora !=0:
+                        self.minuto = 59
+                        self.hora -= 1
                     else:
-                        minuto = 0
-                        hora = 0
-                        if segundo <= 0 and minuto <= 0 and hora <= 0:
+                        self.minuto = 0
+                        self.hora = 0
+                        if self.segundo <= 0 and self.minuto <= 0 and self.hora <= 0:
                             respuesta = messagebox.askyesno("TIEMPO EXPIRADO", "¿DESEA CONTINUAR EL MISMO JUEGO")
 
                             if respuesta == True:
 
-                                segundo = -1
-                                hora = -1
-                                minuto = -1
+                                self.segundo = -1
+                                self.hora = -1
+                                self.minuto = -1
 
-                                self.segundoReloj = self.configuraciones[8]
-                                self.minutoReloj = self.configuraciones[7]
-                                self.horaReloj = self.configuraciones[6]
+                                self.segundoReloj = int(self.configuraciones[8])
+                                self.minutoReloj = int(self.configuraciones[7])
+                                self.horaReloj = int(self.configuraciones[6])
 
                                 self.flag = True
                                 self.relojCronometro()
                             else:
 
-                                segundo = self.configuraciones[8]
-                                hora = self.configuraciones[7]
-                                minuto = self.configuraciones[6]
+                                self.segundo = int(self.configuraciones[8])
+                                self.hora = int(self.configuraciones[7])
+                                self.minuto = int(self.configuraciones[6])
                                 
                                 self.juego()
     
         if self.flag == False:
-            if segundo >= 0:
-                self.secondLabel.configure(text=str(segundo))
-            if hora >= 0:
-                self.hourLabel.configure(text=str(hora))
-            if minuto >= 0:
-                self.minuteLabel.configure(text=str(minuto))
+            if self.segundo >= 0:
+                self.secondLabel.configure(text=str(self.segundo))
+            if self.hora >= 0:
+                self.hourLabel.configure(text=str(self.hora))
+            if self.minuto >= 0:
+                self.minuteLabel.configure(text=str(self.minuto))
         self.time.after(1000,self.temporizador)
 
     def relojCronometro(self):
-        global h,m,s
-
-        s += 1
-        if s >= 60:
-            s = 0
-            m = m + 1
-            if m >= 60:
-                m = 0
-                h = h + 1
-                if h >= 24:
-                    h = 0
+        
+        self.segundoReloj += 1
+        if self.segundoReloj >= 60:
+            self.segundoReloj = 0
+            self.minutoReloj = self.minutoReloj + 1
+            if self.minutoReloj >= 60:
+                self.minutoReloj = 0
+                self.horaReloj = self.horaReloj + 1
+                if self.horaReloj >= 24:
+                    self.horaReloj = 0
         
         #etiqueta que muestra el cronometro en pantalla
-        self.hourLabel.configure(text=str(h))
-        self.minuteLabel.configure(text=str(m))
-        self.secondLabel.configure(text=str(s))
+        self.hourLabel.configure(text=str(self.horaReloj))
+        self.minuteLabel.configure(text=str(self.minutoReloj))
+        self.secondLabel.configure(text=str(self.segundoReloj))
         
         # iniciamos la cuenta progresiva de los segundos
         self.time.after(1000, self.relojCronometro)
 
-
     # MÉTODO DE INICIO DEL JUEGO #
     def inicioJuego(self):
-
-        # VALIDACIONES DE BOTONES HABILITADOS y DESABILITADOS #
-        self.btnIniciarJuego.configure(state=tk.DISABLED)
-        self.btnGuardarJuego.configure(state=tk.NORMAL)
-        self.btnCargarJuego.configure(state=tk.NORMAL)
-        self.btnBorraJuego.configure(state=tk.NORMAL)
-        self.btnTerminarJuego.configure(state=tk.NORMAL)
-        self.btnBorrarJugada.configure(state=tk.NORMAL)
-
-        # SE HABILITAN LOS BOTONES DE JUEGO 
-        for i in self.botonesJuego:
-            i.configure(state=tk.NORMAL)
-
         # Se evalua si el usuario escribio su nombre, de lo contrario el juego no puede iniciar 
         nombreJugador = str(self.txtNombre.get())
-        if not(nombreJugador != "" and len(nombreJugador)<20):
+        largo = len(nombreJugador)
+        if not(nombreJugador != "" and largo < 20):
             messagebox.showerror('Nombre del Jugador','Debe de ingresar el nombre del jugador')
         else:
+            # VALIDACIONES DE BOTONES HABILITADOS y DESABILITADOS #
+            self.btnIniciarJuego.configure(state=tk.DISABLED)
+            self.btnGuardarJuego.configure(state=tk.NORMAL)
+            self.btnCargarJuego.configure(state=tk.NORMAL)
+            self.btnBorraJuego.configure(state=tk.NORMAL)
+            self.btnTerminarJuego.configure(state=tk.NORMAL)
+            self.btnBorrarJugada.configure(state=tk.NORMAL)
+
+            # SE HABILITAN LOS BOTONES DE JUEGO 
+            for i in self.botonesJuego:
+                i.configure(state=tk.NORMAL)
             # Evalua la configuración del reloj
             if self.configuraciones[1] == 1:
                 self.time.after(1000,self.relojCronometro)
@@ -748,6 +735,9 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
             elif self.configuraciones[1] == 3:
                 # TEMPORIZADOR
                 self.inicio = time.time()
+                self.hora = int(self.configuraciones[3])
+                self.minuto = int(self.configuraciones[4])
+                self.segundo = int(self.configuraciones[5])
                 self.time.after(1000,self.temporizador)
 
             elif self.configuraciones[1] == 2:
@@ -755,19 +745,43 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
 
 ###################################################################################################################################################
     def borrarJugada(self):
-#       Elimina la última jugada dejando la casilla vacía. Puede borrar todas las jugadas que ha hecho.  
+#       Elimina la última jugada dejando la ADVERTENCIA vacía. Puede borrar todas las jugadas que ha hecho.  
 #       Use un TDA pila para registrar la información de las jugadas que van sucediento de tal manera que pueda implementar esta funcionalidad. 
 #       Cada vez que se hace una jugada se agrega a la pila (fila y columna de  la  jugada), y si seleccionan este botón, se toma la última jugada agregada en la pila 
-#       (el manejo de la pila es tipo LIFO: Last In First Out, último en entrar primero en salir) y se borra la casilla respectiva de la cuadrícula. 
+#       (el manejo de la pila es tipo LIFO: Last In First Out, último en entrar primero en salir) y se borra la ADVERTENCIA respectiva de la cuadrícula. 
 #       La jugada se quita de la  pila. En el diseño de la solución describa la estructura del TDA usado y el algoritmo de manipulación.
-        pass
+        if len(self.matrizResultados) > 0:
+            ultima_jugada = self.matrizResultados.pop()
+            self.casillas[ultima_jugada[0]][ultima_jugada[1]].configure(text="")
+            self.valoresH[ultima_jugada[0]][ultima_jugada[1]] = 0
+            self.valoresV[ultima_jugada[1]][ultima_jugada[0]] = 0
+        else:
+            messagebox.showinfo('ADVERTENCIA','NO HAY MÁS JUGADAS PARA BORRAR')
 ###################################################################################################################################################
     def terminarJuego(self):
 #       Si responde SI termina de inmediato el juego y se vuelve a mostrar otro juego como si estuviera entrando a la opción de Jugar.  
 #       Si responde NO sigue jugando con el mismo juego.
         respuesta = messagebox.askyesno('TERMINAR JUEGO','¿ESTÁ SEGURO DE TERMINAR EL JUEGO?')
         if respuesta == True:
-            return
+
+            if self.configuraciones[1] == 3:
+                self.time.destroy()
+                self.time = tk.Label(self.master, text= 'TIMER', font=('System',18))
+                self.time.place(x=102,y=488)
+
+                self.hourLabel.configure(text=self.configuraciones[6])
+                self.minuteLabel.configure(text=self.configuraciones[7])
+                self.secondLabel.configure(text=self.configuraciones[8])
+
+                self.flag = False
+            else:
+                self.hourLabel.configure(text='00')
+                self.minuteLabel.configure(text='00')
+                self.secondLabel.configure(text='00')
+                self.segundoReloj = 0
+                self.minutoReloj = 0
+                self.horaReloj = 0
+            self.juego()
         else:
             pass
 ###################################################################################################################################################
@@ -776,21 +790,61 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
 #       Si responde NO sigue jugando con el mismo juego. 
         respuesta = messagebox.askyesno('BORRAR JUEGO','¿ESTÁ SEGURO DE BORRAR EL JUEGO?')
         if respuesta == True:
-            return
+
+            jugadas = len(self.matrizResultados)
+
+            for k in range(jugadas):
+                ultima_jugada = self.matrizResultados.pop()
+                self.casillas[ultima_jugada[0]][ultima_jugada[1]].configure(text="")
+                self.valoresH[ultima_jugada[0]][ultima_jugada[1]] = 0
+                self.valoresV[ultima_jugada[1]][ultima_jugada[0]] = 0
+
+            self.btnIniciarJuego.configure(state=tk.NORMAL)
+            self.btnGuardarJuego.configure(state=tk.DISABLED)
+            self.btnCargarJuego.configure(state=tk.NORMAL)
+            self.btnBorraJuego.configure(state=tk.DISABLED)
+            self.btnTerminarJuego.configure(state=tk.DISABLED)
+            self.btnBorrarJugada.configure(state=tk.DISABLED)
+                
+            for i in self.botonesJuego:
+                i.configure(bg='white smoke')
+                i.configure(state=tk.DISABLED)
+
+            if self.configuraciones[1] == 1:    #Reloj
+                self.time.destroy()
+                self.time = tk.Label(self.master, text= 'RELOJ', font=('System',18))
+                self.time.place(x=102,y=488)
+                self.hourLabel.configure(text='00')
+                self.minuteLabel.configure(text='00')
+                self.secondLabel.configure(text='00')
+                self.segundoReloj = 0
+                self.minutoReloj = 0
+                self.horaReloj = 0
+
+            elif self.configuraciones[1] == 3:  #Timer
+                self.time.destroy()
+                self.time = tk.Label(self.master, text= 'TIMER', font=('System',18))
+                self.time.place(x=102,y=488)
+                self.hourLabel.configure(text=self.configuraciones[6])
+                self.minuteLabel.configure(text=self.configuraciones[7])
+                self.secondLabel.configure(text=self.configuraciones[8])
+                self.flag = False
         else:
             pass
 
-    def cambio_cuadricula_0x0(self):
-        print('signoRh',self.signoRestriccionesH)
-        print('signoRv',self.signoRestriccionesV)
-        print('valoresH',self.valoresH)
-        print('valoresV',self.valoresV)
+    def cuadricula0x0(self):
         try:
             if int(self.numero) in self.valoresV[0]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                self.btnPos00.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos00.configure(bg='white')
 
             if int(self.numero) in self.valoresH[0]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                self.btnPos00.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos00.configure(bg='white')
 
             if int(self.numero) not in self.valoresH[0] and int(self.numero) not in self.valoresV[0]:
                 self.valoresH[0][0] = int(self.numero)
@@ -799,67 +853,92 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((0,0,int(self.numero)))
 
             if self.valoresH[1][0] != 0 and int(self.numero) > self.valoresH[1][0] and self.signoRestriccionesV[0][0] == 'ʌ':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos00.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos00.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos00.configure(bg='white')
                 if self.matrizResultados[-1] == (0,0,int(self.numero)):
                     self.valoresH[0][0] = 0
                     self.valoresV[0][0] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[1][0] != 0 and int(self.numero) < self.valoresH[1][0] and self.signoRestriccionesV[0][0] == 'v':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos00.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos00.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos00.configure(bg='white')
                 if self.matrizResultados[-1] == (0,0,int(self.numero)):
                     self.valoresH[0][0] = 0
                     self.valoresV[0][0] = 0
                     self.matrizResultados.pop()
 
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
 
-    def cambio_cuadricula_0x1(self):
+        self.finalJuego()
+
+    def cuadricula0x1(self):
         try:
             if int(self.numero) in self.valoresV[1]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                self.btnPos01.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos01.configure(bg='white')
 
             if int(self.numero) in self.valoresH[0]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
-
+                self.btnPos01.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos01.configure(bg='white')
             if int(self.numero) not in self.valoresH[0] and int(self.numero) not in self.valoresV[1]:
                 self.valoresH[0][1] = int(self.numero)
                 self.valoresV[1][0] = int(self.numero)
                 self.btnPos01.configure(text=int(self.numero))
                 self.matrizResultados.append((0,1,int(self.numero)))
 
-            if self.valoresH[0][2] != 0 and int(self.numero) < self.valoresH[0][2] and self.signoRestriccionesH[0][1] == ">": 
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+            if self.valoresH[0][2] != 0 and int(self.numero) < self.valoresH[0][2] and self.signoRestriccionesH[0][1] == ">":
+                self.btnPos01.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos01.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos01.configure(bg='white')
                 if self.matrizResultados[-1] == (0,1,int(self.numero)):
                     self.valoresH[0][1] = 0
                     self.valoresV[1][0] = 0
                     self.matrizResultados.pop()
 
             if self.valoresH[0][2] != 0 and int(self.numero) > self.valoresH[0][2] and self.signoRestriccionesH[0][1] == "<":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos01.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos01.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos01.configure(bg='white')
                 if self.matrizResultados[-1] == (0,1,int(self.numero)):
                     self.valoresH[0][1] = 0
                     self.valoresV[1][0] = 0
                     self.matrizResultados.pop()   
 
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
+        
+        self.finalJuego()
 
-
-    def cambio_cuadricula_0x2(self):
+    def cuadricula0x2(self):
         try:
             
             if int(self.numero) in self.valoresV[2]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                self.btnPos02.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos02.configure(bg='white')
 
             if int(self.numero) in self.valoresH[0]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
-
+                self.btnPos02.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos02.configure(bg='white')
             if int(self.numero) not in self.valoresH[0]and int(self.numero) not in self.valoresV[2]:
                 self.valoresH[0][2] = int(self.numero)
                 self.valoresV[2][0] = int(self.numero)
@@ -867,38 +946,55 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((0,2,int(self.numero)))
 
             if self.valoresH[0][3] != 0 and int(self.numero) < self.valoresH[0][3] and self.signoRestriccionesH[0][2] == ">":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos02.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos02.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos02.configure(bg='white')
                 if self.matrizResultados[-1] == (0,2,int(self.numero)):
                     self.valoresH[0][2] = 0
                     self.valoresV[2][0] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[0][1] != 0 and int(self.numero) > self.valoresH[0][1] and self.signoRestriccionesH[0][1] == ">":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos02.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos02.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos02.configure(bg='white')
                 if self.matrizResultados[-1] == (0,2,int(self.numero)):
                     self.valoresH[0][2] = 0
                     self.valoresV[2][0] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[0][1] != 0 and int(self.numero) < self.valoresH[0][1] and self.signoRestriccionesH[0][1] == "<":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos02.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos02.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos02.configure(bg='white')
                 if self.matrizResultados[-1] == (0,2,int(self.numero)):
                     self.valoresH[0][2] = 0
                     self.valoresV[2][0] = 0
                     self.matrizResultados.pop()      
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
+        
+        self.finalJuego()
 
-    def cambio_cuadricula_0x3(self):
+    def cuadricula0x3(self):
         try:
             if int(self.numero) in self.valoresV[3]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                self.btnPos03.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos03.configure(bg='white')
 
             if int(self.numero) in self.valoresH[0]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                self.btnPos03.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos03.configure(bg='white')
 
             if int(self.numero) not in self.valoresH[0]and int(self.numero) not in self.valoresV[3]:
                 self.valoresH[0][3] = int(self.numero)
@@ -907,40 +1003,56 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((0,3,int(self.numero)))
             
             if self.valoresH[0][2] != 0 and int(self.numero) > self.valoresH[0][2] and self.signoRestriccionesH[0][2] == ">":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos03.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos03.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos03.configure(bg='white')
                 if self.matrizResultados[-1] == (0,3,int(self.numero)):
                     self.valoresH[0][3] = 0
                     self.valoresV[3][0] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[0][4] != 0 and int(self.numero) > self.valoresH[0][4] and self.signoRestriccionesH[0][3] == "<":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos03.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos03.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos03.configure(bg='white')
                 if self.matrizResultados[-1] == (0,3,int(self.numero)):
                     self.valoresH[0][3] = 0
                     self.valoresV[3][0] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[1][3] != 0 and int(self.numero) > self.valoresH[1][3] and self.signoRestriccionesV[0][3] == 'ʌ':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos03.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos03.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos03.configure(bg='white')
                 if self.matrizResultados[-1] == (0,3,int(self.numero)):
                     self.valoresH[0][3] = 0
                     self.valoresV[3][0] = 0
                     self.matrizResultados.pop()
                 
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
+        
+        self.finalJuego()
 
-    def cambio_cuadricula_0x4(self):
+    def cuadricula0x4(self):
         try:
             if int(self.numero) in self.valoresV[4]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                self.btnPos04.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos04.configure(bg='white')
 
             if int(self.numero) in self.valoresH[0]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
-
+                self.btnPos04.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos04.configure(bg='white')
             if int(self.numero) not in self.valoresH[0]and int(self.numero) not in self.valoresV[4]:
                 self.valoresH[0][4] = int(self.numero)
                 self.valoresV[4][0] = int(self.numero)
@@ -948,34 +1060,44 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((0,4,int(self.numero)))
             
             if self.valoresH[0][3] != 0 and int(self.numero) < self.valoresH[0][3] and self.signoRestriccionesH[0][3] == "<":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos04.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos04.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos04.configure(bg='white')
                 if self.matrizResultados[-1] == (0,4,int(self.numero)):
                     self.valoresH[0][4] = 0
                     self.valoresV[4][0] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[1][4] != 0 and int(self.numero) < self.valoresH[1][4] and self.signoRestriccionesV[0][4] == 'v':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos04.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos04.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos04.configure(bg='white')
                 if self.matrizResultados[-1] == (0,4,int(self.numero)):
                     self.valoresH[0][4] = 0
                     self.valoresV[4][0] = 0
                     self.matrizResultados.pop()    
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
+        
+        self.finalJuego()
 
-    #Fila 1
-
-    def cambio_cuadricula_1x0(self):
+    def cuadricula1x0(self):
 
         try:
             if int(self.numero) in self.valoresV[0]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
-
+                self.btnPos10.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos10.configure(bg='white')
             if int(self.numero) in self.valoresH[1]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
-
+                self.btnPos10.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos10.configure(bg='white')
             if int(self.numero) not in self.valoresH[1]and int(self.numero) not in self.valoresV[0]:
                 self.valoresH[1][0] = int(self.numero)
                 self.valoresV[0][1] = int(self.numero)
@@ -983,55 +1105,78 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((1,0,int(self.numero)))
             
             if self.valoresH[1][1] != 0 and int(self.numero) < self.valoresH[1][1] and self.signoRestriccionesH[1][0] == ">":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos10.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos10.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos10.configure(bg='white')
                 if self.matrizResultados[-1] == (1,0,int(self.numero)):
                     self.valoresH[1][0] = 0
                     self.valoresV[0][1] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[0][0] != 0 and int(self.numero) < self.valoresH[0][0] and self.signoRestriccionesV[0][0] == 'ʌ':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos10.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos10.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos10.configure(bg='white')
                 if self.matrizResultados[-1] == (1,0,int(self.numero)):
                     self.valoresH[1][0] = 0
                     self.valoresV[0][1] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[2][0] != 0 and int(self.numero) > self.valoresH[2][0] and self.signoRestriccionesV[1][0] == 'ʌ':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos10.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos10.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos10.configure(bg='white')
                 if self.matrizResultados[-1] == (1,0,int(self.numero)):
                     self.valoresH[1][0] = 0
                     self.valoresV[0][1] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[0][0] != 0 and int(self.numero) > self.valoresH[0][0] and self.signoRestriccionesV[0][0] == 'v':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos10.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos10.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos10.configure(bg='white')
                 if self.matrizResultados[-1] == (1,0,int(self.numero)):
                     self.valoresH[1][0] = 0
                     self.valoresV[0][1] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[2][0] != 0 and int(self.numero) < self.valoresH[2][0] and self.signoRestriccionesV[1][0] == 'v':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos10.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos10.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos10.configure(bg='white')
                 if self.matrizResultados[-1] == (1,0,int(self.numero)):
                     self.valoresH[1][0] = 0
                     self.valoresV[0][1] = 0
                     self.matrizResultados.pop()
             
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
+        
+        self.finalJuego()
 
-    def cambio_cuadricula_1x1(self):
+    def cuadricula1x1(self):
         try:
             if int(self.numero) in self.valoresV[1]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                self.btnPos11.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos11.configure(bg='white')
 
             if int(self.numero) in self.valoresH[1]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                self.btnPos11.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos11.configure(bg='white')
 
             if int(self.numero) not in self.valoresH[1]and int(self.numero) not in self.valoresV[1]:
                 self.valoresH[1][1] = int(self.numero)
@@ -1040,31 +1185,45 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((1,1,int(self.numero)))
             
             if self.valoresH[1][0] != 0 and int(self.numero) > self.valoresH[1][0] and self.signoRestriccionesH[1][0] == ">":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos11.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos11.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos11.configure(bg='white')
                 if self.matrizResultados[-1] == (1,1,int(self.numero)):
                     self.valoresH[1][1] = 0
                     self.valoresV[1][1] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[1][2] != 0 and int(self.numero) > self.valoresH[1][2] and self.signoRestriccionesH[1][1] == "<":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos11.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos11.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos11.configure(bg='white')               
                 if self.matrizResultados[-1] == (1,1,int(self.numero)):
                     self.valoresH[1][1] = 0
                     self.valoresV[1][1] = 0
                     self.matrizResultados.pop()
             
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
+        
+        self.finalJuego()
 
-    def cambio_cuadricula_1x2(self):
+    def cuadricula1x2(self):
         try:
             if int(self.numero) in self.valoresV[2]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                self.btnPos12.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos12.configure(bg='white')
 
             if int(self.numero) in self.valoresH[1]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                self.btnPos12.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos12.configure(bg='white')
 
             if int(self.numero) not in self.valoresH[1]and int(self.numero) not in self.valoresV[2]:
                 self.valoresH[1][2] = int(self.numero)
@@ -1073,24 +1232,34 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((1,2,int(self.numero)))
             
             if self.valoresH[1][1] != 0 and int(self.numero) < self.valoresH[1][1] and self.signoRestriccionesH[1][1] == "<":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos12.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos12.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos12.configure(bg='white')
                 if self.matrizResultados[-1] == (1,2,int(self.numero)):
                     self.valoresH[1][2] = 0
                     self.valoresV[2][1] = 0
                     self.matrizResultados.pop()
             
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
+        
+        self.finalJuego()
 
-    def cambio_cuadricula_1x3(self):
+    def cuadricula1x3(self):
         try:
             if int(self.numero) in self.valoresV[3]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                self.btnPos13.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos13.configure(bg='white')
 
             if int(self.numero) in self.valoresH[1]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
-
+                self.btnPos13.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos13.configure(bg='white')
             if int(self.numero) not in self.valoresH[1]and int(self.numero) not in self.valoresV[3]:
                 self.valoresH[1][3] = int(self.numero)
                 self.valoresV[3][1] = int(self.numero)
@@ -1098,39 +1267,55 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((1,3,int(self.numero)))
             
             if self.valoresH[2][3] != 0 and int(self.numero) > self.valoresH[2][3] and self.signoRestriccionesV[1][3] == 'ʌ':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos13.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos13.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos13.configure(bg='white')                
                 if self.matrizResultados[-1] == (1,3,int(self.numero)):
                     self.valoresH[1][3] = 0
                     self.valoresV[3][1] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[0][3] != 0 and int(self.numero) < self.valoresH[0][3] and self.signoRestriccionesV[0][3] == 'ʌ':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos13.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos13.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos13.configure(bg='white')
                 if self.matrizResultados[-1] == (1,3,int(self.numero)):
                     self.valoresH[1][3] = 0
                     self.valoresV[3][1] = 0
                     self.matrizResultados.pop()
             
-            if self.valoresH[2][3] != 0 and int(self.numero) < self.valoresH[2][3] and self.signoRestriccionesV[1][3] == 'v':  
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+            if self.valoresH[2][3] != 0 and int(self.numero) < self.valoresH[2][3] and self.signoRestriccionesV[1][3] == 'v':
+                self.btnPos13.configure(bg='red')  
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos13.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos13.configure(bg='white')
                 if self.matrizResultados[-1] == (1,3,int(self.numero)):
                     self.valoresH[1][3] = 0
                     self.valoresV[3][1] = 0
                     self.matrizResultados.pop()   
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
+        
+        self.finalJuego()
 
-    def cambio_cuadricula_1x4(self):
+    def cuadricula1x4(self):
         try:
             if int(self.numero) in self.valoresV[4]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                self.btnPos14.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos14.configure(bg='white')
 
             if int(self.numero) in self.valoresH[1]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
-
+                self.btnPos14.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos14.configure(bg='white')
             if int(self.numero) not in self.valoresH[1]and int(self.numero) not in self.valoresV[4]:
                 self.valoresH[1][4] = int(self.numero)
                 self.valoresV[4][1] = int(self.numero)
@@ -1138,34 +1323,44 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((1,4,int(self.numero)))
             
             if self.valoresH[2][4] != 0 and int(self.numero) > self.valoresH[2][4] and self.signoRestriccionesV[1][4] == 'ʌ':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos14.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos14.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos14.configure(bg='white')
                 if self.matrizResultados[-1] == (1,4,int(self.numero)):
                     self.valoresH[1][4] = 0
                     self.valoresV[4][1] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[0][4] != 0 and int(self.numero) > self.valoresH[0][4] and self.signoRestriccionesV[0][4] == 'v':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos14.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos14.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos14.configure(bg='white')
                 if self.matrizResultados[-1] == (1,4,int(self.numero)):
                     self.valoresH[1][4] = 0
                     self.valoresV[4][1] = 0
                     self.matrizResultados.pop()
             
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
+        
+        self.finalJuego()
 
-    # Fila 2
-
-    def cambio_cuadricula_2x0(self):
+    def cuadricula2x0(self):
         try:
             if int(self.numero) in self.valoresV[0]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
-
+                self.btnPos20.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos20.configure(bg='white')
             if int(self.numero) in self.valoresH[2]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
-
+                self.btnPos20.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos20.configure(bg='white')
             if int(self.numero) not in self.valoresH[2]and int(self.numero) not in self.valoresV[0]:
                 self.valoresH[2][0] = int(self.numero)
                 self.valoresV[0][2] = int(self.numero)
@@ -1173,55 +1368,76 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((2,0,int(self.numero)))
             
             if self.valoresH[2][1] != 0 and int(self.numero) > self.valoresH[2][1] and self.signoRestriccionesH[2][0] == "<":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos20.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos20.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos20.configure(bg='white')
                 if self.matrizResultados[-1] == (2,0,int(self.numero)):
                     self.valoresH[2][0] = 0
                     self.valoresV[0][2] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[1][0] != 0 and int(self.numero) < self.valoresH[1][0] and self.signoRestriccionesV[1][0] == 'ʌ':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos20.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos20.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos20.configure(bg='white')
                 if self.matrizResultados[-1] == (2,0,int(self.numero)):
                     self.valoresH[2][0] = 0
                     self.valoresV[0][2] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[3][0] != 0 and int(self.numero) > self.valoresH[3][0] and self.signoRestriccionesV[2][0] == 'ʌ':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos20.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos20.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos20.configure(bg='white')
                 if self.matrizResultados[-1] == (2,0,int(self.numero)):
                     self.valoresH[2][0] = 0
                     self.valoresV[0][2] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[3][0] != 0 and int(self.numero) < self.valoresH[3][0] and self.signoRestriccionesV[2][0] == 'v':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos20.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos20.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos20.configure(bg='white')
                 if self.matrizResultados[-1] == (2,0,int(self.numero)):
                     self.valoresH[2][0] = 0
                     self.valoresV[0][2] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[1][0] != 0 and int(self.numero) > self.valoresH[1][0] and self.signoRestriccionesV[1][0] == 'v':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos20.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos20.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos20.configure(bg='white')
                 if self.matrizResultados[-1] == (2,0,int(self.numero)):
                     self.valoresH[2][0] = 0
                     self.valoresV[0][2] = 0
                     self.matrizResultados.pop()
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
+        
+        self.finalJuego()
 
-    def cambio_cuadricula_2x1(self):
+    def cuadricula2x1(self):
         try:
             if int(self.numero) in self.valoresV[1]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
-
+                self.btnPos21.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos21.configure(bg='white')
             if int(self.numero) in self.valoresH[2]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
-
+                self.btnPos21.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos21.configure(bg='white')
             if int(self.numero) not in self.valoresH[2]and int(self.numero) not in self.valoresV[1]:
                 self.valoresH[2][1] = int(self.numero)
                 self.valoresV[1][2] = int(self.numero)
@@ -1229,32 +1445,44 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((2,1,int(self.numero)))
             
             if self.valoresH[2][0] != 0 and int(self.numero) < self.valoresH[2][0] and self.signoRestriccionesH[2][0] == "<":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos21.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos21.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos21.configure(bg='white')
                 if self.matrizResultados[-1] == (2,1,int(self.numero)):
                     self.valoresH[2][1] = 0
                     self.valoresV[1][2] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[3][1] != 0 and int(self.numero) > self.valoresH[3][1] and self.signoRestriccionesV[2][1] == 'ʌ':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos21.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos21.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos21.configure(bg='white')
                 if self.matrizResultados[-1] == (2,1,int(self.numero)):
                     self.valoresH[2][1] = 0
                     self.valoresV[1][2] = 0
                     self.matrizResultados.pop()
             
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
+        
+        self.finalJuego()
 
-    def cambio_cuadricula_2x2(self):
+    def cuadricula2x2(self):
         try:
             if int(self.numero) in self.valoresV[2]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
-
+                self.btnPos22.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos22.configure(bg='white')
             if int(self.numero) in self.valoresH[2]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
-
+                self.btnPos22.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos22.configure(bg='white')
             if int(self.numero) not in self.valoresH[2]and int(self.numero) not in self.valoresV[2]:
                 self.valoresH[2][2] = int(self.numero)
                 self.valoresV[2][2] = int(self.numero)
@@ -1262,16 +1490,22 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((2,2,int(self.numero)))
 
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
+        
+        self.finalJuego()
 
-    def cambio_cuadricula_2x3(self):
+    def cuadricula2x3(self):
         try:
             if int(self.numero) in self.valoresV[3]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
-
+                self.btnPos23.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos23.configure(bg='white')
             if int(self.numero) in self.valoresH[2]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
-
+                self.btnPos23.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos23.configure(bg='white')
             if int(self.numero) not in self.valoresH[2]and int(self.numero) not in self.valoresV[3]:
                 self.valoresH[2][3] = int(self.numero)
                 self.valoresV[3][2] = int(self.numero)
@@ -1279,47 +1513,65 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((2,3,int(self.numero)))
             
             if self.valoresH[2][4] != 0 and int(self.numero) < self.valoresH[2][4] and self.signoRestriccionesH[2][3] == ">":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos23.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos23.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos23.configure(bg='white')
                 if self.matrizResultados[-1] == (2,3,int(self.numero)):
                     self.valoresH[2][3] = 0
                     self.valoresV[3][2] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[2][4] != 0 and int(self.numero) > self.valoresH[2][4] and self.signoRestriccionesH[2][3] == "<":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos23.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos23.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos23.configure(bg='white')
                 if self.matrizResultados[-1] == (2,3,int(self.numero)):
                     self.valoresH[2][3] = 0
                     self.valoresV[3][2] = 0
                     self.matrizResultados.pop()
 
             if self.valoresH[1][3] != 0 and int(self.numero) < self.valoresH[1][3] and self.signoRestriccionesV[1][3] == 'ʌ':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos23.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos23.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos23.configure(bg='white')
                 if self.matrizResultados[-1] == (2,3,int(self.numero)):
                     self.valoresH[2][3] = 0
                     self.valoresV[3][2] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[1][3] != 0 and int(self.numero) > self.valoresH[1][3] and self.signoRestriccionesV[1][3] == 'v':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos23.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos23.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos23.configure(bg='white')
                 if self.matrizResultados[-1] == (2,3,int(self.numero)):
                     self.valoresH[2][3] = 0
                     self.valoresV[3][2] = 0
                     self.matrizResultados.pop()  
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
+        
+        self.finalJuego()
 
-    def cambio_cuadricula_2x4(self):
+    def cuadricula2x4(self):
         try:
             if int(self.numero) in self.valoresV[4]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
-
+                self.btnPos24.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos24.configure(bg='white')
             if int(self.numero) in self.valoresH[2]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
-
+                self.btnPos24.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos24.configure(bg='white')
             if int(self.numero) not in self.valoresH[2]and int(self.numero) not in self.valoresV[4]:
                 self.valoresH[2][4] = int(self.numero)
                 self.valoresV[4][2] = int(self.numero)
@@ -1327,50 +1579,67 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((2,4,int(self.numero)))
             
             if self.valoresH[2][3] != 0 and int(self.numero) > self.valoresH[2][3] and self.signoRestriccionesH[2][3] == ">":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos24.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos24.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos24.configure(bg='white')
                 if self.matrizResultados[-1] == (2,4,int(self.numero)):
                     self.valoresH[2][4] = 0
                     self.valoresV[4][2] = 0
                     self.matrizResultados.pop()
 
             if self.valoresH[2][3] != 0 and int(self.numero) < self.valoresH[2][3] and self.signoRestriccionesH[2][3] == "<":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos24.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos24.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos24.configure(bg='white')
                 if self.matrizResultados[-1] == (2,4,int(self.numero)):
                     self.valoresH[2][4] = 0
                     self.valoresV[4][2] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[1][4] != 0 and int(self.numero) < self.valoresH[1][4] and self.signoRestriccionesV[1][4] == 'ʌ':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos24.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos24.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos24.configure(bg='white')
                 if self.matrizResultados[-1] == (2,4,int(self.numero)):
                     self.valoresH[2][4] = 0
                     self.valoresV[4][2] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[3][4] != 0 and int(self.numero) < self.valoresH[3][4] and self.signoRestriccionesV[2][4] == 'v':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos24.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos24.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos24.configure(bg='white')
                 if self.matrizResultados[-1] == (2,4,int(self.numero)):
                     self.valoresH[2][4] = 0
                     self.valoresV[4][2] = 0
                     self.matrizResultados.pop()
             
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
+        
+        self.finalJuego()
 
-    #Fila 3
-
-    def cambio_cuadricula_3x0(self):
+    def cuadricula3x0(self):
         try:
             if int(self.numero) in self.valoresV[0]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                self.btnPos30.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos30.configure(bg='white')
 
             if int(self.numero) in self.valoresH[3]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
-
+                self.btnPos30.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos30.configure(bg='white')
             if int(self.numero) not in self.valoresH[3]and int(self.numero) not in self.valoresV[0]:
                 self.valoresH[3][0] = int(self.numero)
                 self.valoresV[0][3] = int(self.numero)
@@ -1378,48 +1647,66 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((3,0,int(self.numero)))
             
             if self.valoresH[3][1] != 0 and int(self.numero) < self.valoresH[3][1] and self.signoRestriccionesH[3][0] == ">":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos30.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos30.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos30.configure(bg='white')
                 if self.matrizResultados[-1] == (3,0,int(self.numero)):
                     self.valoresH[3][0] = 0
                     self.valoresV[0][3] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[4][0] != 0 and int(self.numero) > self.valoresH[4][0] and self.signoRestriccionesV[3][0] == 'v':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos30.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos30.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos30.configure(bg='white')
                 if self.matrizResultados[-1] == (3,0,int(self.numero)):
                     self.valoresH[3][0] = 0
                     self.valoresV[0][3] = 0
                     self.matrizResultados.pop()
 
             if self.valoresH[2][0] != 0 and int(self.numero) < self.valoresH[2][0] and self.signoRestriccionesV[2][0] == 'ʌ':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos30.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos30.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos30.configure(bg='white')
                 if self.matrizResultados[-1] == (3,0,int(self.numero)):
                     self.valoresH[3][0] = 0
                     self.valoresV[0][3] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[2][0] != 0 and int(self.numero) > self.valoresH[2][0] and self.signoRestriccionesV[2][0] == 'v':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos30.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos30.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos30.configure(bg='white')
                 if self.matrizResultados[-1] == (3,0,int(self.numero)):
                     self.valoresH[3][0] = 0
                     self.valoresV[0][3] = 0
                     self.matrizResultados.pop()
                 
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
+        
+        self.finalJuego()
 
-    def cambio_cuadricula_3x1(self):
+    def cuadricula3x1(self):
         try:
             if int(self.numero) in self.valoresV[1]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
-
+                self.btnPos31.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos31.configure(bg='white')
             if int(self.numero) in self.valoresH[3]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
-
+                self.btnPos31.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos31.configure(bg='white')
             if int(self.numero) not in self.valoresH[3] and int(self.numero) not in self.valoresV[1]:
                 self.valoresH[3][1] = int(self.numero)
                 self.valoresV[1][3] = int(self.numero)
@@ -1427,40 +1714,55 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((3,1,int(self.numero)))
             
             if self.valoresH[3][0] != 0 and int(self.numero) > self.valoresH[3][0] and self.signoRestriccionesH[3][0] == ">":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos31.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos31.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos31.configure(bg='white')
                 if self.matrizResultados[-1] == (3,1,int(self.numero)):
                     self.valoresH[3][1] = 0
                     self.valoresV[1][3] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[2][1] != 0 and int(self.numero) < self.valoresH[2][1] and self.signoRestriccionesV[2][1] == 'ʌ':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos31.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos31.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos31.configure(bg='white')
                 if self.matrizResultados[-1] == (3,1,int(self.numero)):
                     self.valoresH[3][1] = 0
                     self.valoresV[1][3] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[4][1] != 0 and int(self.numero) > self.valoresH[4][1] and self.signoRestriccionesV[3][1] == 'ʌ':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos31.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos31.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos31.configure(bg='white')
                 if self.matrizResultados[-1] == (3,1,int(self.numero)):
                     self.valoresH[3][1] = 0
                     self.valoresV[1][3] = 0
                     self.matrizResultados.pop()
                 
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
+        
+        self.finalJuego()
 
-    def cambio_cuadricula_3x2(self):
+    def cuadricula3x2(self):
         try:
             if int(self.numero) in self.valoresV[2]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
-
+                self.btnPos32.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos32.configure(bg='white')
             if int(self.numero) in self.valoresH[3]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
-
+                self.btnPos32.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos32.configure(bg='white')
             if int(self.numero) not in self.valoresH[3]and int(self.numero) not in self.valoresV[2]:
                 self.valoresH[3][2] = int(self.numero)
                 self.valoresV[2][3] = int(self.numero)
@@ -1468,24 +1770,33 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((3,2,int(self.numero)))
             
             if self.valoresH[4][2] != 0 and int(self.numero) > self.valoresH[4][2] and self.signoRestriccionesV[3][2] == 'ʌ':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos32.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos32.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos32.configure(bg='white')
                 if self.matrizResultados[-1] == (3,2,int(self.numero)):
                     self.valoresH[3][2] = 0
                     self.valoresV[2][3] = 0
                     self.matrizResultados.pop()
             
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
+        
+        self.finalJuego()
 
-    def cambio_cuadricula_3x3(self):
+    def cuadricula3x3(self):
         try:
             if int(self.numero) in self.valoresV[3]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
-
+                self.btnPos33.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos33.configure(bg='white')
             if int(self.numero) in self.valoresH[3]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
-
+                self.btnPos33.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos33.configure(bg='white')
             if int(self.numero) not in self.valoresH[3]and int(self.numero) not in self.valoresV[3]:
                 self.valoresH[3][3] = int(self.numero)
                 self.valoresV[3][3] = int(self.numero)
@@ -1493,32 +1804,44 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((3,3,int(self.numero)))
             
             if self.valoresH[4][3] != 0 and int(self.numero) > self.valoresH[4][3] and self.signoRestriccionesV[3][3] == 'ʌ':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos33.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos33.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos33.configure(bg='white')
                 if self.matrizResultados[-1] == (3,3,int(self.numero)):
                     self.valoresH[3][3] = 0
                     self.valoresV[3][3] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[4][3] != 0 and int(self.numero) < self.valoresH[4][3] and self.signoRestriccionesV[3][3] == 'v':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos33.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos33.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos33.configure(bg='white')
                 if self.matrizResultados[-1] == (3,3,int(self.numero)):
                     self.valoresH[3][3] = 0
                     self.valoresV[3][3] = 0
                     self.matrizResultados.pop()
             
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
+        
+        self.finalJuego()
 
-    def cambio_cuadricula_3x4(self):
+    def cuadricula3x4(self):
         try:
             if int(self.numero) in self.valoresV[4]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
-
+                self.btnPos34.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos34.configure(bg='white')
             if int(self.numero) in self.valoresH[3]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
-
+                self.btnPos34.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos34.configure(bg='white')
             if int(self.numero) not in self.valoresH[3]and int(self.numero) not in self.valoresV[4]:
                 self.valoresH[3][4] = int(self.numero)
                 self.valoresV[4][3] = int(self.numero)
@@ -1526,26 +1849,33 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((3,4,int(self.numero)))
             
             if self.valoresH[2][4] != 0 and int(self.numero) > self.valoresH[2][4] and self.signoRestriccionesV[2][4] == 'v':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos34.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos34.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos34.configure(bg='white')
                 if self.matrizResultados[-1] == (3,4,int(self.numero)):
                     self.valoresH[3][4] = 0
                     self.valoresV[4][3] = 0
                     self.matrizResultados.pop()
             
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
+        
+        self.finalJuego()
 
-    #Fila 4
-
-    def cambio_cuadricula_4x0(self):
+    def cuadricula4x0(self):
         try:
             if int(self.numero) in self.valoresV[0]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
-
+                self.btnPos40.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos40.configure(bg='white')
             if int(self.numero) in self.valoresH[4]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
-
+                self.btnPos40.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos40.configure(bg='white')
             if int(self.numero) not in self.valoresH[4]and int(self.numero) not in self.valoresV[0]:
                 self.valoresH[4][0] = int(self.numero)
                 self.valoresV[0][4] = int(self.numero)
@@ -1553,24 +1883,33 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((4,0,int(self.numero)))
             
             if self.valoresH[3][0] != 0 and int(self.numero) < self.valoresH[3][0] and self.signoRestriccionesV[3][0] == 'ʌ':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos40.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos40.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos40.configure(bg='white')
                 if self.matrizResultados[-1] == (4,0,int(self.numero)):
                     self.valoresH[4][0] = 0
                     self.valoresV[0][4] = 0
                     self.matrizResultados.pop()
             
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
+        
+        self.finalJuego()
 
-    def cambio_cuadricula_4x1(self):
+    def cuadricula4x1(self):
         try:
             if int(self.numero) in self.valoresV[1]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
-
+                self.btnPos41.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos41.configure(bg='white')
             if int(self.numero) in self.valoresH[4]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
-
+                self.btnPos41.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos41.configure(bg='white')
             if int(self.numero) not in self.valoresH[4]and int(self.numero) not in self.valoresV[1]:
                 self.valoresH[4][1] = int(self.numero)
                 self.valoresV[1][4] = int(self.numero)
@@ -1578,32 +1917,44 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((4,1,int(self.numero)))
 
             if self.valoresH[4][2] != 0 and int(self.numero) < self.valoresH[4][2] and self.signoRestriccionesH[4][1] == ">":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos41.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos41.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos41.configure(bg='white')
                 if self.matrizResultados[-1] == (4,1,int(self.numero)):
                     self.valoresH[4][1] = 0
                     self.valoresV[1][4] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[3][1] != 0 and int(self.numero) < self.valoresH[3][1] and self.signoRestriccionesV[3][1] == 'ʌ':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos41.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos41.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos41.configure(bg='white')
                 if self.matrizResultados[-1] == (4,1,int(self.numero)):
                     self.valoresH[4][1] = 0
                     self.valoresV[1][4] = 0
                     self.matrizResultados.pop()       
             
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
+        
+        self.finalJuego()
 
-    def cambio_cuadricula_4x2(self):
+    def cuadricula4x2(self):
         try:
             if int(self.numero) in self.valoresV[2]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
-
+                self.btnPos42.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos42.configure(bg='white')
             if int(self.numero) in self.valoresH[4]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
-
+                self.btnPos42.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos42.configure(bg='white')
             if int(self.numero) not in self.valoresH[4]and int(self.numero) not in self.valoresV[2]:
                 self.valoresH[4][2] = int(self.numero)
                 self.valoresV[2][4] = int(self.numero)
@@ -1611,40 +1962,55 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((4,2,int(self.numero)))
 
             if self.valoresH[4][1] != 0 and int(self.numero) > self.valoresH[4][1] and self.signoRestriccionesH[4][1] == ">":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos42.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos42.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos42.configure(bg='white')
                 if self.matrizResultados[-1] == (4,2,int(self.numero)):
                     self.valoresH[4][2] = 0
                     self.valoresV[2][4] = 0
                     self.matrizResultados.pop()
 
             if self.valoresH[4][3] != 0 and int(self.numero) < self.valoresH[4][3] and self.signoRestriccionesH[4][2] == ">":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos42.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos42.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos42.configure(bg='white')
                 if self.matrizResultados[-1] == (4,2,int(self.numero)):
                     self.valoresH[4][2] = 0
                     self.valoresV[2][4] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[3][2] != 0 and int(self.numero) < self.valoresH[3][2] and self.signoRestriccionesV[3][2] == 'ʌ':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR!")
+                self.btnPos42.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR!")
                 self.btnPos42.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos42.configure(bg='white')
                 if self.matrizResultados[-1] == (4,2,int(self.numero)):
                     self.valoresH[4][2] = 0
                     self.valoresV[2][4] = 0
                     self.matrizResultados.pop()
                 
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
+        
+        self.finalJuego()
 
-    def cambio_cuadricula_4x3(self):
+    def cuadricula4x3(self):
         try:
             if int(self.numero) in self.valoresV[3]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
-
+                self.btnPos43.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos43.configure(bg='white')
             if int(self.numero) in self.valoresH[4]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
-
+                self.btnPos43.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos43.configure(bg='white')
             if int(self.numero) not in self.valoresH[4]and int(self.numero) not in self.valoresV[3]:
                 self.valoresH[4][3] = int(self.numero)
                 self.valoresV[3][4] = int(self.numero)
@@ -1652,48 +2018,65 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((4,3,int(self.numero)))
             
             if self.valoresH[4][4] != 0 and int(self.numero) < self.valoresH[4][4] and self.signoRestriccionesH[4][3] == ">":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos43.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos43.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos43.configure(bg='white')
                 if self.matrizResultados[-1] == (4,3,int(self.numero)):
                     self.valoresH[4][3] = 0
                     self.valoresV[3][4] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[4][2] != 0 and int(self.numero) > self.valoresH[4][2] and self.signoRestriccionesH[4][2] == ">":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos43.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos43.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos43.configure(bg='white')
                 if self.matrizResultados[-1] == (4,3,int(self.numero)):
                     self.valoresH[4][3] = 0
                     self.valoresV[3][4] = 0
                     self.matrizResultados.pop()
             
             if self.valoresH[3][3] != 0 and int(self.numero) < self.valoresH[3][3] and self.signoRestriccionesV[3][3] == 'ʌ':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
+                self.btnPos43.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MAYOR")
                 self.btnPos43.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos43.configure(bg='white')
                 if self.matrizResultados[-1] == (4,3,int(self.numero)):
                     self.valoresH[4][3] = 0
                     self.valoresV[3][4] = 0
                     self.matrizResultados.pop()
             
-
             if self.valoresH[3][3] != 0 and int(self.numero) > self.valoresH[3][3] and self.signoRestriccionesV[3][3] == 'v':
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos43.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos43.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos43.configure(bg='white')
                 if self.matrizResultados[-1] == (4,3,int(self.numero)):
                     self.valoresH[4][3] = 0
                     self.valoresV[3][4] = 0
                     self.matrizResultados.pop()  
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
 
-    def cambio_cuadricula_4x4(self):
+        self.finalJuego()
+
+    def cuadricula4x4(self):
         try:
             if int(self.numero) in self.valoresV[4]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
-
+                self.btnPos44.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA COLUMNA")
+                if respuesta == 'ok':
+                    self.btnPos44.configure(bg='white')
             if int(self.numero) in self.valoresH[4]:
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
-
+                self.btnPos44.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE EL ELEMENTO YA ESTÁ EN LA FILA")
+                if respuesta == 'ok':
+                    self.btnPos44.configure(bg='white')
             if int(self.numero) not in self.valoresH[4]and int(self.numero) not in self.valoresV[4]:
                 self.valoresH[4][4] = int(self.numero)
                 self.valoresV[4][4] = int(self.numero)
@@ -1701,14 +2084,146 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.matrizResultados.append((4,4,int(self.numero)))
             
             if self.valoresH[4][3] != 0 and int(self.numero) > self.valoresH[4][3] and self.signoRestriccionesH[4][3] == ">":
-                messagebox.showinfo(title="Casilla",message= "JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
+                self.btnPos44.configure(bg='red')
+                respuesta = messagebox.showinfo("ADVERTENCIA","JUGADA NO ES VÁLIDA PORQUE NO CUMPLE CON LA RESTRICCIÓN DE MENOR")
                 self.btnPos44.configure(text="")
+                if respuesta == 'ok':
+                    self.btnPos44.configure(bg='white')
                 if self.matrizResultados[-1] == (4,4,int(self.numero)):
                     self.valoresH[4][4] = 0
                     self.valoresV[4][4] = 0
                     self.matrizResultados.pop()
         except:
-            messagebox.showinfo(title="Casilla",message= "FALTA QUE SELECCIONE UN DÍGITO")
+            messagebox.showinfo("ADVERTENCIA","FALTA QUE SELECCIONE UN DÍGITO")
+        
+        self.finalJuego()
+
+    def finalJuego(self):
+        if 0 not in self.valoresH[0] and 0 not in self.valoresH[1] and 0 not in self.valoresH[2] and 0 not in self.valoresH[3] and 0 not in self.valoresH[4]:
+            messagebox.showinfo('¡EXCELENTE!','JUEGO TERMINADO CON ÉXITO')
+
+            if self.configuraciones[1] == 1:
+                self.listaJugador = (self.txtNombre.get(),self.horaReloj*3600 + self.minutoReloj*60 + self.segundoReloj)
+
+                self.time.destroy()
+                self.time = tk.Label(self.master, text= 'RELOJ', font=('System',18))
+                self.time.place(x=102,y=488)
+                self.hourLabel.configure(text='00')
+                self.minuteLabel.configure(text='00')
+                self.secondLabel.configure(text='00')
+                self.segundoReloj = 0
+                self.minutoReloj = 0
+                self.horaReloj = 0
+            
+                if self.configuraciones[0] == 1:
+                    if len(self.Top10Facil) < 10:
+                        self.Top10Facil.append(self.listaJugador)
+                        self.Top10FacilAux = sorted(self.Top10Facil, key= lambda tiempo: tiempo[1])
+                    elif len(self.Top10Facil) == 10:
+                        for numero in self.Top10Facil:
+                            if numero[1] > self.listaJugador[1]:
+                                self.Top10FacilAux = sorted(self.Top10Facil, key= lambda tiempo: tiempo[1])
+                                del self.Top10FacilAux[-1]
+                                self.Top10FacilAux.append(self.listaJugador)
+                                self.Top10FacilAux = sorted(self.Top10FacilAux, key= lambda tiempo: tiempo[1])
+                                break
+
+                elif self.configuraciones[0] == 2:
+                    if len(self.Top10Intermedio) < 10:
+                        self.Top10Intermedio.append(self.listaJugador)
+                        self.Top10IntermedioAux = sorted(self.Top10Intermedio, key= lambda tiempo: tiempo[1])
+                    elif len(self.Top10Intermedio) == 10:
+                        for numero in self.Top10Intermedio:
+                            if numero[1] > self.listaJugador[1]:
+                                self.Top10IntermedioAux = sorted(self.Top10Facil, key= lambda tiempo: tiempo[1])
+                                del self.Top10IntermedioAux[-1]
+                                self.Top10IntermedioAux.append(self.listaJugador)
+                                self.Top10IntermedioAux = sorted(self.Top10IntermedioAux, key= lambda tiempo: tiempo[1])
+                                break
+
+                elif self.configuraciones[0] == 3:
+                    if len(self.Top10Dificil) < 10:
+                        self.Top10Dificil.append(self.listaJugador)
+                        self.Top10DificilAux = sorted(self.Top10Dificil, key= lambda tiempo: tiempo[1])
+                    elif len(self.Top10Dificil) == 10:
+                        for numero in self.Top10Dificil:
+                            if numero[1] > self.listaJugador[1]:
+                                self.Top10DificilAux = sorted(self.Top10Dificil, key= lambda tiempo: tiempo[1])
+                                del self.Top10DificilAux[-1]
+                                self.Top10DificilAux.append(self.listaJugador)
+                                self.Top10DificilAux = sorted(self.Top10DificilAux, key= lambda tiempo: tiempo[1])
+                                break
+
+            elif self.configuraciones[1] == 3:
+                #TIMER
+                self.final = time.time()
+                self.resulT = self.inicio - self.final
+                self.listaJugador = (self.txtNombre,self.resulT)
+
+                self.time.destroy()
+                self.time = tk.Label(self.master, text= 'TIMER', font=('System',18))
+                self.time.place(x=102,y=488)
+                self.hourLabel.configure(text=self.configuraciones[6])
+                self.minuteLabel.configure(text=self.configuraciones[7])
+                self.secondLabel.configure(text=self.configuraciones[8])
+                self.flag = False
+
+                if self.configuraciones[0] == 1:
+                    if len(self.Top10Facil) < 10:
+                        self.Top10Facil.append(self.listaJugador)
+                        self.Top10FacilAux = sorted(self.Top10Facil, key= lambda tiempo: tiempo[1])
+                    elif len(self.Top10Facil) == 10:
+                        for numero in self.Top10Facil:
+                            if numero[1] > self.listaJugador[1]:
+                                self.Top10FacilAux = sorted(self.Top10Facil, key= lambda tiempo: tiempo[1])
+                                del self.Top10FacilAux[-1]
+                                self.Top10FacilAux.append(self.listaJugador)
+                                self.Top10FacilAux = sorted(self.Top10FacilAux, key= lambda tiempo: tiempo[1])
+                                break
+
+                elif self.configuraciones[0] == 2:
+                    if len(self.Top10Intermedio) < 10:
+                        self.Top10Intermedio.append(self.listaJugador)
+                        self.Top10IntermedioAux = sorted(self.Top10Intermedio, key= lambda tiempo: tiempo[1])
+                    elif len(self.Top10Intermedio) == 10:
+                        for numero in self.Top10Intermedio:
+                            if numero[1] > self.listaJugador[1]:
+                                self.Top10IntermedioAux = sorted(self.Top10Facil, key= lambda tiempo: tiempo[1])
+                                del self.Top10IntermedioAux[-1]
+                                self.Top10IntermedioAux.append(self.listaJugador)
+                                self.Top10IntermedioAux = sorted(self.Top10IntermedioAux, key= lambda tiempo: tiempo[1])
+                                break
+
+                elif self.configuraciones[0] == 3:
+                    if len(self.Top10Dificil) < 10:
+                        self.Top10Dificil.append(self.listaJugador)
+                        self.Top10DificilAux = sorted(self.Top10Dificil, key= lambda tiempo: tiempo[1])
+                    elif len(self.Top10Dificil) == 10:
+                        for numero in self.Top10Dificil:
+                            if numero[1] > self.listaJugador[1]:
+                                self.Top10DificilAux = sorted(self.Top10Dificil, key= lambda tiempo: tiempo[1])
+                                del self.Top10DificilAux[-1]
+                                self.Top10DificilAux.append(self.listaJugador)
+                                self.Top10DificilAux = sorted(self.Top10DificilAux, key= lambda tiempo: tiempo[1])
+                                break
+                        jugadas = len(self.matrizResultados)
+
+            for k in range(jugadas):
+                ultima_jugada = self.matrizResultados.pop()
+                self.casillas[ultima_jugada[0]][ultima_jugada[1]].configure(text="")
+                self.valoresH[ultima_jugada[0]][ultima_jugada[1]] = 0
+                self.valoresV[ultima_jugada[1]][ultima_jugada[0]] = 0
+
+            self.btnIniciarJuego.configure(state=tk.NORMAL)
+            self.btnGuardarJuego.configure(state=tk.DISABLED)
+            self.btnCargarJuego.configure(state=tk.NORMAL)
+            self.btnBorraJuego.configure(state=tk.DISABLED)
+            self.btnTerminarJuego.configure(state=tk.DISABLED)
+            self.btnBorrarJugada.configure(state=tk.DISABLED)
+                
+            for i in self.botonesJuego:
+                i.configure(bg='white smoke')
+                i.configure(state=tk.DISABLED)               
 
 ###################################################################################################################################################
     def Top(self):
@@ -1716,49 +2231,32 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
         # Despliega una sola pantalla con los registros de los mejores 10 primeros jugadores por cada nivel: aquellos que hicieron menos tiempo para completar el juego.  
         # En caso de no tener los 10 jugadores en algún nivel se despliegan los que se tengan.  
         # El Top 10 se guarda en el archivo “futoshiki2021top10.dat”.
-        global proceso
-        global running
-        # verifica si el tiempo ha iniciado
-        if running:
-            self.time.after_cancel(proceso)     #el tiempo se detiene
-            running = False                     #la indicadora pasa a False
         # Ventana que se desplega para ver el TOP 10
         self.top = tk.Toplevel()
         self.top.geometry('500x800')
         self.top.title('TOP 10')
         self.lblTitulo = tk.Label(self.top,text='FUTOSHIKI',fg='white',bg='red',font=('System',20)).pack(fill=tk.X)
 
-        top10= open('futoshiki2021top10.dat','rb')
-        tops = pickle.load(top10)
-        jugadores = str(self.txtNombre.get())
-        if self.configuraciones[0] == 1:
-            tops[0].append(jugadores)
-        elif self.configuraciones[0] == 2:
-            tops[1].append(jugadores)
-        elif self.configuraciones[0] == 3:
-            tops[2].append(jugadores)
-        top10.close()
-
         self.lblDificil = tk.Label(self.top,text='NIVEL DÍFICIL:',font=('System'))
         self.lblDificil.place(x=20,y=50)
         self.nombre = tk.Label(self.top,text='JUGADOR',font=('System'))
         self.nombre.place(x=200,y=50)
         self.tiempo = tk.Label(self.top,text='TIEMPO',font=('System'))
-        self.tiempo.place(x=360,y=50)
+        self.tiempo.place(x=280,y=50)
 
         self.lblIntermedio = tk.Label(self.top,text='NIVEL INTERMEDIO:',font=('System'))
         self.lblIntermedio.place(x=20,y=290)
         self.nombre = tk.Label(self.top,text='JUGADOR',font=('System'))
         self.nombre.place(x=200,y=290)
         self.tiempo = tk.Label(self.top,text='TIEMPO',font=('System'))
-        self.tiempo.place(x=360,y=290)
+        self.tiempo.place(x=280,y=290)
 
         self.lblFacil = tk.Label(self.top,text='NIVEL FÁCIL:',font=('System'))
         self.lblFacil.place(x=20,y=530)
         self.nombre = tk.Label(self.top,text='JUGADOR',font=('System'))
         self.nombre.place(x=200,y=530)
         self.tiempo = tk.Label(self.top,text='TIEMPO',font=('System'))
-        self.tiempo.place(x=360,y=530)
+        self.tiempo.place(x=280,y=530)
 
 ######################################################## JUGADORES EN MODO DÍFICIL ################################################################
         self.nombreD1 = tk.Label(self.top,text='',font=('System'))
@@ -1889,17 +2387,53 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
         nombreF10 = tk.Label(self.top,text='10-',font=('System'))
         nombreF10.place(x=177,y=730)
 
-        # LISTA QUE ALMACENA CADA UNO DE LOS NOMBRES DE LOS JUGADORES 
-        self.TOP10 = [[self.nombreD1,self.nombreD2,self.nombreD3,self.nombreD4,self.nombreD5,self.nombreD6,self.nombreD7,self.nombreD8,self.nombreD9,self.nombreD10],\
-                      [self.nombreI1,self.nombreI2,self.nombreI3,self.nombreI4,self.nombreI5,self.nombreI6,self.nombreI7,self.nombreI8,self.nombreI9,self.nombreI10],\
-                      [self.nombreF1,self.nombreF2,self.nombreF3,self.nombreF4,self.nombreF5,self.nombreF6,self.nombreF7,self.nombreF8,self.nombreF9,self.nombreF10]]
+        # LISTA QUE ALMACENA CADA UNO DE LOS NOMBRES DE LOS JUGADORES VARIANDO POR SU DIFICULTAD DE JUEGO
+        self.nombresTopDificil = [self.nombreD1,self.nombreD2,self.nombreD3,self.nombreD4,self.nombreD5,self.nombreD6,self.nombreD7,self.nombreD8,self.nombreD9,self.nombreD10]
+        self.nombresTopIntermedio = [self.nombreI1,self.nombreI2,self.nombreI3,self.nombreI4,self.nombreI5,self.nombreI6,self.nombreI7,self.nombreI8,self.nombreI9,self.nombreI10]
+        self.nombresTopFacil = [self.nombreF1,self.nombreF2,self.nombreF3,self.nombreF4,self.nombreF5,self.nombreF6,self.nombreF7,self.nombreF8,self.nombreF9,self.nombreF10]
 
-        for i,nombre in enumerate(tops[2]):
-            self.TOP10[0][i].configure(text=tops[2][i])
-        for i,nombre in enumerate(tops[1]):
-            self.TOP10[1][i].configure(text=tops[1][i])
-        for i,nombre in enumerate(tops[0]):
-            self.TOP10[2][i].configure(text=tops[0][i])
+        try:
+            for indice,jugador in enumerate(self.Top10FacilAux):
+                hora = jugador[1] // 60 // 60
+                minutos = jugador[1] // 60 
+                segundos = jugador[1] % 60
+                self.nombresTopFacil[indice].configure(text=(str(jugador[0])+'     '+str(hora),':',str(minutos),':',str(segundos)))
+        except:
+            pass
+
+        try:
+            for indice,jugador in enumerate(self.Top10IntermedioAux):
+                hora = jugador[1] // 60 // 60
+                minutos = jugador[1] // 60 
+                segundos = jugador[1] % 60
+                self.nombresTopIntermedio[indice].configure(text=(str(jugador[0])+'     '+str(hora),':',str(minutos),':',str(segundos)))
+        except:
+            pass
+
+        try:
+            for indice,jugador in enumerate(self.Top10DificilAux):
+                hora = jugador[1] // 60 // 60
+                minutos = jugador[1] // 60 
+                segundos = jugador[1] % 60
+                self.nombresTopDificil[indice].configure(text=(str(jugador[0])+'     '+str(hora),':',str(minutos),':',str(segundos)))
+        except:
+            pass
+
+        top10 = open('futoshiki2021top10.dat','w')
+        try:
+            top10.write(str(self.Top10FacilAux))
+        except:
+            pass
+        
+        try:
+            top10.write(str(self.Top10IntermedioAux))
+        except:
+            pass
+
+        try:
+            top10.write(str(self.Top10DificilAux))
+        except:
+            pass
         top10.close()
 
         self.btnSalir = tk.Button(self.top,text='Salir',font=('System'),command=self.salirVentana)
@@ -1907,11 +2441,8 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
 
 ###################################################################################################################################################
     def salirVentana(self):
-        global h,m,s
-        global running
-        global proceso
-        self.time.after(1000,self.inicioJuego)  #el tiempo se reanuda
         self.top.destroy()
+        self.inicioJuego()
 ###################################################################################################################################################
     def guardarJuego(self):
 #Este botón se puede usar en cualquier momento que el juego haya iniciado, antes de ello permanece inhabilitado. 
@@ -1952,12 +2483,6 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
 ###################################################################################################################################################
 
 ######################################################## PROGRAMA PRINCIPAL #######################################################################
-proceso=0  
-h=0         
-m=0
-s=0
-running = False
-###################################################################################################################################################
 def main():
     app = tk.Tk()
     ventanaPrincipal = Futoshiki(app)
