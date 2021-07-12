@@ -125,9 +125,9 @@ class Configuracion:
         hourAux = self.hora
 
         self.configuracion = open('futoshiki2021configuracion.dat','wb')    #se abre el archivo para guardar la configuración
-        pickle.dump((nivelJuego,relojConfig,PosicionNumeros,self.hora,self.minuto,self.segundo),self.configuracion)#se graban las variables cada vez que se ingrese a la ventana Configuración
+        pickle.dump([nivelJuego,relojConfig,PosicionNumeros,self.hora,self.minuto,self.segundo],self.configuracion)#se graban las variables cada vez que se ingrese a la ventana Configuración
         self.configuracion.close()
-        return (nivelJuego,relojConfig,PosicionNumeros,self.hora,self.minuto,self.segundo,hourAux,minuteAux,secondAux)     #retorna las variables
+        return [nivelJuego,relojConfig,PosicionNumeros,self.hora,self.minuto,self.segundo,hourAux,minuteAux,secondAux]     #retorna las variables
 ####################################################################################################################################################
     def confirmar(self):
         if int(self.relojConfig.get()) == 3:
@@ -215,7 +215,7 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
         self.relojConfig.set('1')
         self.PosicionNumeros = tk.IntVar()
         self.PosicionNumeros.set('1')
-        self.configuraciones = (self.nivelJuego.get(),self.relojConfig.get(),self.PosicionNumeros.get())    #se crea una lista que guarde la configuración por default 
+        self.configuraciones = [self.nivelJuego.get(),self.relojConfig.get(),self.PosicionNumeros.get()]    #se crea una lista que guarde la configuración por default 
 
         #TEMPORIZADOR VARIABLES
         self.flag = False
@@ -243,7 +243,7 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
             leerConfig.close()
         except:
             self.configuracion = open('futoshiki2021configuracion.dat','wb')
-            pickle.dump(self.configuraciones,self.configuracion)    #grabo la configuración en el archivo .dat
+            pickle.dump(list(self.configuraciones),self.configuracion)    #grabo la configuración en el archivo .dat
             self.configuracion.close()
 ###################################################################################################################################################      
     def inicializar_gui(self):
@@ -264,9 +264,10 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
     def juego(self):
         try:
             leerConfig = open('futoshiki2021configuracion.dat','rb')
-            self.configuraciones[0] = leerConfig[0]
-            self.configuraciones[1] = leerConfig[1]
-            self.configuraciones[2] = leerConfig[2]
+            config = pickle.load(leerConfig)
+            self.configuraciones[0] = config[0]
+            self.configuraciones[1] = config[1]
+            self.configuraciones[2] = config[2]
         except:
             pass
 
@@ -685,8 +686,9 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
 
                                 self.flag = True
                                 self.relojCronometro()
-                            else:
 
+                            else:
+                                self.time.destroy()
                                 self.segundo = int(self.configuraciones[8])
                                 self.hora = int(self.configuraciones[7])
                                 self.minuto = int(self.configuraciones[6])
@@ -2489,15 +2491,15 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
         guardarJuego = open('futoshiki2021juegoactual.dat','wb')
         if self.configuraciones[1] == 1:
             #CRONOMETRO
-            pickle.dump([nivelJuego,relojConfig,posicionNum,self.configuraciones,self.txtNombre.get(),self.x[int(nivelJuego)-1][self.azar],self.matrizResultados,self.segundo,\
+            pickle.dump([nivelJuego,relojConfig,posicionNum,list(self.configuraciones),self.txtNombre.get(),self.x[int(nivelJuego)-1][self.azar],self.matrizResultados,\
                         self.segundoReloj,self.minutoReloj,self.horaReloj],guardarJuego)
 
         elif self.configuraciones[1] == 2:
             #SIN RELOJ NI TIMER
-            pickle.dump([nivelJuego,relojConfig,posicionNum,self.configuraciones,self.txtNombre.get(),self.x[int(nivelJuego)-1][self.azar],self.matrizResultados],guardarJuego)
+            pickle.dump([nivelJuego,relojConfig,posicionNum,list(self.configuraciones),self.txtNombre.get(),self.x[int(nivelJuego)-1][self.azar],self.matrizResultados],guardarJuego)
 
         elif self.configuraciones[1] == 3:
-            pickle.dump([nivelJuego,relojConfig,posicionNum,self.configuraciones,self.txtNombre.get(),self.x[int(nivelJuego)-1][self.azar],self.matrizResultados,self.segundo,\
+            pickle.dump([nivelJuego,relojConfig,posicionNum,list(self.configuraciones),self.txtNombre.get(),self.x[int(nivelJuego)-1][self.azar],self.matrizResultados,self.segundo,\
                     self.minuto,self.hora],guardarJuego)
         guardarJuego.close()
         
@@ -2555,7 +2557,7 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                                         self.restriccionesH[i][op].configure(text=numeros[0])
                                         self.signoRestriccionesH[i][op] = numeros[0]
 
-        self.configuraciones = cargarPartida[3]
+        self.configuraciones = list(cargarPartida[3])
 
         for x in cargarPartida[6]:
             self.casillas[x[0]][x[1]].configure(text=x[2])
@@ -2574,6 +2576,7 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
             self.segundo = cargarPartida[7]
             self.minuto = cargarPartida[8]
             self.hora = cargarPartida[9]
+
             self.configuraciones[3] = self.hora
             self.configuraciones[4] = self.minuto
             self.configuraciones[5] = self.segundo
@@ -2588,9 +2591,9 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
             self.minutoReloj = cargarPartida[8]
             self.horaReloj = cargarPartida[9]
 
-            self.secondLabel.configure(text=str(self.segundo))
-            self.minuteLabel.configure(text=str(self.minuto))
-            self.hourLabel.configure(text=str(self.hora))
+            self.secondLabel.configure(text=str(self.segundoReloj))
+            self.minuteLabel.configure(text=str(self.minutoReloj))
+            self.hourLabel.configure(text=str(self.horaReloj))
 
         cargarJuego.close()
 
