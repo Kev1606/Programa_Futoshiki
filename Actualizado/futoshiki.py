@@ -17,6 +17,7 @@ import pickle
 import random
 import tkinter as tk
 from tkinter import messagebox
+from tkinter.constants import END
 ######################################################## CLASES ###################################################################################
 class Configuracion:
 # Esta opción es para indicar las condiciones con que se va a jugar.  
@@ -52,7 +53,7 @@ class Configuracion:
         configure = open('futoshiki2021configuracion.dat','rb')
         configuracion = pickle.load(configure)
         self.relojConfig.set(str(configuracion[1]))
-        configure.close()
+        
 
         self.lblReloj = tk.Label(self.ventanaConfigurar,text='Reloj:',font=('System',12)).place(x=10,y=115)
         self.chkConTiempo = tk.Radiobutton(self.ventanaConfigurar,text="Si", font=('System',12), value = 1, variable=self.relojConfig \
@@ -72,9 +73,10 @@ class Configuracion:
         self.second= tk.StringVar()
 
         #Se configura las variables en el valor default
-        self.hour.set("00")
-        self.minute.set("00")
-        self.second.set("00")
+        self.hour.set(str(configuracion[3]))
+        self.minute.set(str(configuracion[4]))
+        self.second.set(str(configuracion[5]))
+        configure.close()
         self.hourLabel = tk.Label(self.ventanaConfigurar,text='Horas',width=8,font=('System',12)).place(x=285,y=110)
         self.minuteLabel = tk.Label(self.ventanaConfigurar,text='Minutos',width=8,font=('System',12)).place(x=337,y=110)
         self.secondLabel = tk.Label(self.ventanaConfigurar,text='Segundos',width=8,font=('System',12)).place(x=399,y=110)
@@ -222,9 +224,9 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
         self.minute=tk.StringVar()
         self.second=tk.StringVar()
         #Se configura las variables en el valor default del reloj
-        self.hour.set("00")
-        self.minute.set("00")
-        self.second.set("00")
+        self.hour.set("0")
+        self.minute.set("0")
+        self.second.set("0")
 
         self.segundoReloj = 0
         self.minutoReloj = 0
@@ -234,9 +236,10 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
         self.Top10Facil = []
         self.Top10Intermedio = []
         self.Top10Dificil = []
-
         try:
             leerConfig = open('futoshiki2021configuracion.dat','rb')
+            config = pickle.load(leerConfig)
+            self.configuraciones = config
             leerConfig.close()
         except:
             self.configuracion = open('futoshiki2021configuracion.dat','wb')
@@ -256,9 +259,16 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
 ###################################################################################################################################################
     def configurar(self):
         configurar = Configuracion(self.master)                 #en configuración se llama a la clase hija "Configuracion" enviando la ventana principal como parámetro
-        self.configuraciones = configurar.configuraciones()     #en esta variable se guarda lo que se retorna de la clase 
+        self.configuraciones = configurar.configuraciones()     #en esta variable se guarda lo que se retorna de la clase
 ###################################################################################################################################################  
     def juego(self):
+        try:
+            leerConfig = open('futoshiki2021configuracion.dat','rb')
+            self.configuraciones[0] = leerConfig[0]
+            self.configuraciones[1] = leerConfig[1]
+            self.configuraciones[2] = leerConfig[2]
+        except:
+            pass
 
         self.valoresH = [[0,0,0,0,0],\
                          [0,0,0,0,0],\
@@ -286,6 +296,9 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
         self.lblNombre.place(x=10,y=60)
         self.txtNombre = tk.Entry(self.master,width=50,font=('System',12))
         self.txtNombre.place(x=150,y=60)
+
+        self.txtNombre.delete(0,END)
+        self.txtNombre.configure(state=tk.NORMAL)
         # BOTONES DE LA INTERACCIÓN CON EL JUEGO #
         self.btnIniciarJuego = tk.Button(self.master,text='INICIAR JUEGO',bg='red',font=('System',10),command=self.inicioJuego)
         self.btnIniciarJuego.place(x=5,y=450)
@@ -471,12 +484,12 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
         if configuracion[0] == 1:
             self.lblNivelJuego.configure(text="NIVEL FÁCIL")
             partidas = open('futoshiki2021partidas.dat','rb')
-            x = pickle.load(partidas)
+            self.x = pickle.load(partidas)
             # CARGA DE ARCHIVOS .DAT #
             self.azar = random.randint(0,2)     #se crean las partidas de forma aleatoria
             for i,filas in enumerate(self.casillas):
                     for op,botones in enumerate(filas):
-                            for ind,numeros in enumerate(x[0][self.azar]):
+                            for ind,numeros in enumerate(self.x[0][self.azar]):
                                 if i == numeros[1]:
                                         if op == numeros[2]:
                                             # Si el dígito que se encuentra en ese momento se puede transforma en entero se almacena en la lista de botones de la cuadricula
@@ -499,12 +512,12 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
         elif configuracion[0] == 2:
             self.lblNivelJuego.configure(text="NIVEL INTERMEDIO")
             partidas = open('futoshiki2021partidas.dat','rb')
-            x = pickle.load(partidas)
+            self.x = pickle.load(partidas)
             # CARGA DE ARCHIVOS .DAT #
             self.azar = random.randint(0,2)     #se crean las partidas de forma aleatoria
             for i,filas in enumerate(self.casillas):
                     for op,botones in enumerate(filas):
-                            for ind,numeros in enumerate(x[1][self.azar]):
+                            for ind,numeros in enumerate(self.x[1][self.azar]):
                                 if i == numeros[1]:
                                         if op == numeros[2]:
                                             try:
@@ -531,12 +544,12 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
         elif configuracion[0] == 3:
             self.lblNivelJuego.configure(text="NIVEL DÍFICIL")
             partidas = open('futoshiki2021partidas.dat','rb')
-            x = pickle.load(partidas)
+            self.x = pickle.load(partidas)
             # CARGA DE ARCHIVOS .DAT #
             self.azar = random.randint(0,2)     #se crean las partidas de forma aleatoria
             for i,filas in enumerate(self.casillas):
                     for op,botones in enumerate(filas):
-                            for ind,numeros in enumerate(x[2][self.azar]):
+                            for ind,numeros in enumerate(self.x[2][self.azar]):
                                 if i == numeros[1]:
                                         if op == numeros[2]:
                                             # Si el dígito que se encuentra en ese momento se puede transforma en entero se almacena en la lista de botones de la cuadricula
@@ -562,11 +575,11 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
             # CRONÓMETRO #
             self.time = tk.Label(self.master, text= 'RELOJ',font=('System',18))
             self.time.place(x=102,y=488)
-            self.hourLabel = tk.Label(self.master,text='00',font=('System',20))
+            self.hourLabel = tk.Label(self.master,text='0',font=('System',20))
             self.hourLabel.place(x=60,y=525)
-            self.minuteLabel = tk.Label(self.master,text='00',font=('System',20))
+            self.minuteLabel = tk.Label(self.master,text='0',font=('System',20))
             self.minuteLabel.place(x=117,y=525)
-            self.secondLabel = tk.Label(self.master,text='00',font=('System',20))
+            self.secondLabel = tk.Label(self.master,text='0',font=('System',20))
             self.secondLabel.place(x=185,y=525)
         
         elif configuracion[1] == 2:
@@ -624,9 +637,9 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
         
         # INTERACCIÓN CON LAS PARTIDAS DE JUEGO #
         # Estos botones se mantienen inhabilitados hasta que se inicie una partida
-        self.btnGuardarJuego = tk.Button(self.master,text='GUARDAR JUEGO',font=('System',10),state=tk.DISABLED)
+        self.btnGuardarJuego = tk.Button(self.master,text='GUARDAR JUEGO',font=('System',10),state=tk.DISABLED,command=self.guardarJuego)
         self.btnGuardarJuego.place(x=305,y=525)
-        self.btnCargarJuego = tk.Button(self.master,text='CARGAR JUEGO',font=('System',10),state=tk.DISABLED)
+        self.btnCargarJuego = tk.Button(self.master,text='CARGAR JUEGO',font=('System',10),state=tk.NORMAL,command=self.cargarJuego)
         self.btnCargarJuego.place(x=445,y=525)
 
 ###################################################################################################################################################
@@ -720,7 +733,7 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
             # VALIDACIONES DE BOTONES HABILITADOS y DESABILITADOS #
             self.btnIniciarJuego.configure(state=tk.DISABLED)
             self.btnGuardarJuego.configure(state=tk.NORMAL)
-            self.btnCargarJuego.configure(state=tk.NORMAL)
+            self.btnCargarJuego.configure(state=tk.DISABLED)
             self.btnBorraJuego.configure(state=tk.NORMAL)
             self.btnTerminarJuego.configure(state=tk.NORMAL)
             self.btnBorrarJugada.configure(state=tk.NORMAL)
@@ -763,6 +776,8 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
 #       Si responde NO sigue jugando con el mismo juego.
         respuesta = messagebox.askyesno('TERMINAR JUEGO','¿ESTÁ SEGURO DE TERMINAR EL JUEGO?')
         if respuesta == True:
+            self.txtNombre.delete(0,END)
+            self.txtNombre.configure(state=tk.NORMAL)
 
             if self.configuraciones[1] == 3:
                 self.time.destroy()
@@ -774,10 +789,14 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.secondLabel.configure(text=self.configuraciones[8])
 
                 self.flag = False
-            else:
-                self.hourLabel.configure(text='00')
-                self.minuteLabel.configure(text='00')
-                self.secondLabel.configure(text='00')
+
+            elif self.configuraciones[1] == 1:
+                self.time.destroy()
+                self.time = tk.Label(self.master, text= 'RELOJ', font=('System',18))
+                self.time.place(x=102,y=488)
+                self.hourLabel.configure(text='0')
+                self.minuteLabel.configure(text='0')
+                self.secondLabel.configure(text='0')
                 self.segundoReloj = 0
                 self.minutoReloj = 0
                 self.horaReloj = 0
@@ -790,6 +809,9 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
 #       Si responde NO sigue jugando con el mismo juego. 
         respuesta = messagebox.askyesno('BORRAR JUEGO','¿ESTÁ SEGURO DE BORRAR EL JUEGO?')
         if respuesta == True:
+
+            self.txtNombre.delete(0,END)
+            self.txtNombre.configure(state=tk.NORMAL)
 
             jugadas = len(self.matrizResultados)
 
@@ -814,9 +836,9 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.time.destroy()
                 self.time = tk.Label(self.master, text= 'RELOJ', font=('System',18))
                 self.time.place(x=102,y=488)
-                self.hourLabel.configure(text='00')
-                self.minuteLabel.configure(text='00')
-                self.secondLabel.configure(text='00')
+                self.hourLabel.configure(text='0')
+                self.minuteLabel.configure(text='0')
+                self.secondLabel.configure(text='0')
                 self.segundoReloj = 0
                 self.minutoReloj = 0
                 self.horaReloj = 0
@@ -831,7 +853,8 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.flag = False
         else:
             pass
-
+        
+        
     def cuadricula0x0(self):
         try:
             if int(self.numero) in self.valoresV[0]:
@@ -2100,7 +2123,7 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
 
     def finalJuego(self):
         if 0 not in self.valoresH[0] and 0 not in self.valoresH[1] and 0 not in self.valoresH[2] and 0 not in self.valoresH[3] and 0 not in self.valoresH[4]:
-            messagebox.showinfo('¡EXCELENTE!','JUEGO TERMINADO CON ÉXITO')
+            jugadas = len(self.matrizResultados)
 
             if self.configuraciones[1] == 1:
                 self.listaJugador = (self.txtNombre.get(),self.horaReloj*3600 + self.minutoReloj*60 + self.segundoReloj)
@@ -2108,9 +2131,9 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 self.time.destroy()
                 self.time = tk.Label(self.master, text= 'RELOJ', font=('System',18))
                 self.time.place(x=102,y=488)
-                self.hourLabel.configure(text='00')
-                self.minuteLabel.configure(text='00')
-                self.secondLabel.configure(text='00')
+                self.hourLabel.configure(text='0')
+                self.minuteLabel.configure(text='0')
+                self.secondLabel.configure(text='0')
                 self.segundoReloj = 0
                 self.minutoReloj = 0
                 self.horaReloj = 0
@@ -2206,13 +2229,15 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                                 self.Top10DificilAux.append(self.listaJugador)
                                 self.Top10DificilAux = sorted(self.Top10DificilAux, key= lambda tiempo: tiempo[1])
                                 break
-                        jugadas = len(self.matrizResultados)
 
-            for k in range(jugadas):
-                ultima_jugada = self.matrizResultados.pop()
-                self.casillas[ultima_jugada[0]][ultima_jugada[1]].configure(text="")
-                self.valoresH[ultima_jugada[0]][ultima_jugada[1]] = 0
-                self.valoresV[ultima_jugada[1]][ultima_jugada[0]] = 0
+            try:
+                for k in range(jugadas):
+                    ultima_jugada = self.matrizResultados.pop()
+                    self.casillas[ultima_jugada[0]][ultima_jugada[1]].configure(text="")
+                    self.valoresH[ultima_jugada[0]][ultima_jugada[1]] = 0
+                    self.valoresV[ultima_jugada[1]][ultima_jugada[0]] = 0
+            except:
+                pass
 
             self.btnIniciarJuego.configure(state=tk.NORMAL)
             self.btnGuardarJuego.configure(state=tk.DISABLED)
@@ -2223,7 +2248,26 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
                 
             for i in self.botonesJuego:
                 i.configure(bg='white smoke')
-                i.configure(state=tk.DISABLED)               
+                i.configure(state=tk.DISABLED)
+            
+            
+            try:
+                grabarTop = open('futoshiki2021top10.dat','rb')
+            except:
+                if self.configuraciones[0] == 1:
+                    grabarTop = open('futoshiki2021top10.dat','wb')
+                    pickle.dump([self.Top10FacilAux],grabarTop)
+                    grabarTop.close()
+                elif self.configuraciones[0] == 2:
+                    grabarTop = open('futoshiki2021top10.dat','wb')
+                    pickle.dump([self.Top10IntermedioAux],grabarTop)
+                    grabarTop.close()
+                elif self.configuraciones[0] == 3:
+                    grabarTop = open('futoshiki2021top10.dat','wb')
+                    pickle.dump([self.Top10DificilAux],grabarTop)
+                    grabarTop.close()
+
+            messagebox.showinfo('¡EXCELENTE!','JUEGO TERMINADO CON ÉXITO')
 
 ###################################################################################################################################################
     def Top(self):
@@ -2393,45 +2437,31 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
         self.nombresTopFacil = [self.nombreF1,self.nombreF2,self.nombreF3,self.nombreF4,self.nombreF5,self.nombreF6,self.nombreF7,self.nombreF8,self.nombreF9,self.nombreF10]
 
         try:
-            for indice,jugador in enumerate(self.Top10FacilAux):
+            top10 = open('futoshiki2021top10.dat','rb')
+            listaTop = pickle.load(top10)
+            for indice,jugador in enumerate(listaTop[0]):
                 hora = jugador[1] // 60 // 60
                 minutos = jugador[1] // 60 
                 segundos = jugador[1] % 60
-                self.nombresTopFacil[indice].configure(text=(str(jugador[0])+'     '+str(hora),':',str(minutos),':',str(segundos)))
+                self.nombresTopFacil[indice].configure(text=(str(jugador[0]),str(hora),':',str(minutos),':',str(segundos)))
         except:
             pass
 
         try:
-            for indice,jugador in enumerate(self.Top10IntermedioAux):
+            for indice,jugador in enumerate(listaTop[1]):
                 hora = jugador[1] // 60 // 60
                 minutos = jugador[1] // 60 
                 segundos = jugador[1] % 60
-                self.nombresTopIntermedio[indice].configure(text=(str(jugador[0])+'     '+str(hora),':',str(minutos),':',str(segundos)))
+                self.nombresTopIntermedio[indice].configure(text=(str(jugador[0]),str(hora),':',str(minutos),':',str(segundos)))
         except:
             pass
 
         try:
-            for indice,jugador in enumerate(self.Top10DificilAux):
+            for indice,jugador in enumerate(listaTop[2]):
                 hora = jugador[1] // 60 // 60
                 minutos = jugador[1] // 60 
                 segundos = jugador[1] % 60
-                self.nombresTopDificil[indice].configure(text=(str(jugador[0])+'     '+str(hora),':',str(minutos),':',str(segundos)))
-        except:
-            pass
-
-        top10 = open('futoshiki2021top10.dat','w')
-        try:
-            top10.write(str(self.Top10FacilAux))
-        except:
-            pass
-        
-        try:
-            top10.write(str(self.Top10IntermedioAux))
-        except:
-            pass
-
-        try:
-            top10.write(str(self.Top10DificilAux))
+                self.nombresTopDificil[indice].configure(text=(str(jugador[0]),str(hora),':',str(minutos),':',str(segundos)))
         except:
             pass
         top10.close()
@@ -2449,13 +2479,121 @@ class Futoshiki(tk.Frame):                  #se crea la clase padre
 # Guarda en el archivo “futoshiki2021juegoactual.dat” todo el estado del  juego  actual: configuración, cuadrícula, nombre del jugador, etc.  
 # El objetivo es que el jugador pueda en cualquier momento guardar el juego y posteriormente continuarlo en el punto donde hizo el guardado del juego. 
 # Este archivo solo va a contener una partida. En caso de que haya una partida en el archivo, se borra y se guarda la del momento.
-        pass
+        configure = open('futoshiki2021configuracion.dat','rb')    
+        configuracion = pickle.load(configure)                     
+        nivelJuego = configuracion[0]
+        relojConfig = configuracion[1]
+        posicionNum = configuracion[2]
+        configure.close()
+
+        guardarJuego = open('futoshiki2021juegoactual.dat','wb')
+        if self.configuraciones[1] == 1:
+            #CRONOMETRO
+            pickle.dump([nivelJuego,relojConfig,posicionNum,self.configuraciones,self.txtNombre.get(),self.x[int(nivelJuego)-1][self.azar],self.matrizResultados,self.segundo,\
+                        self.segundoReloj,self.minutoReloj,self.horaReloj],guardarJuego)
+
+        elif self.configuraciones[1] == 2:
+            #SIN RELOJ NI TIMER
+            pickle.dump([nivelJuego,relojConfig,posicionNum,self.configuraciones,self.txtNombre.get(),self.x[int(nivelJuego)-1][self.azar],self.matrizResultados],guardarJuego)
+
+        elif self.configuraciones[1] == 3:
+            pickle.dump([nivelJuego,relojConfig,posicionNum,self.configuraciones,self.txtNombre.get(),self.x[int(nivelJuego)-1][self.azar],self.matrizResultados,self.segundo,\
+                    self.minuto,self.hora],guardarJuego)
+        guardarJuego.close()
+        
 ###################################################################################################################################################
     def cargarJuego(self):
 #Este botón se puede usar solamente cuando un juego no se haya iniciado, luego de ello permanece inhabilitado. 
 # Trae del archivo “futoshiki2021juegoactual.dat” el juego que fue guardado y lo pone en la pantalla como el juego actual con exactamente el 
 # mismo estado que tenía cuando fue guardado. El juego continúa cuando el jugador usa el botón de INICIAR JUEGO.
-        pass
+        cargarJuego = open('futoshiki2021juegoactual.dat','rb')
+        cargarPartida = pickle.load(cargarJuego)
+
+        self.txtNombre.insert(0,cargarPartida[4])
+        self.txtNombre.configure(state=tk.DISABLED)
+
+        if cargarPartida[0] == 1:
+            self.lblNivelJuego.configure(text="NIVEL FÁCIL")
+        elif cargarPartida[0] == 2:
+            self.lblNivelJuego.configure(text="NIVEL INTERMEDIO")
+        elif cargarPartida[0] == 3:
+            self.lblNivelJuego.configure(text="NIVEL DÍFICIL")
+        
+        for i,filas in enumerate(self.casillas):
+            for op,botones in enumerate(filas):
+                try:
+                    self.casillas[i][op].configure(text='')
+                    self.casillas[i][op].configure(state=tk.NORMAL)
+                    self.valoresH[i][op] = 0
+                    self.valoresV[op][i] = 0
+                    self.restriccionesH[i][op].configure(text='')
+                    self.signoRestriccionesH[i][op] = 0
+                    self.restriccionesV[i][op].configure(text='')
+                    self.signoRestriccionesV[i][op] = 0
+                except:
+                    pass
+
+
+        for i,filas in enumerate(self.casillas):
+            for op,botones in enumerate(filas):
+                    for ind,numeros in enumerate(cargarPartida[5]):
+                        if i == numeros[1]:
+                            if op == numeros[2]:
+                                # Si el dígito que se encuentra en ese momento se puede transforma en entero se almacena en la lista de botones de la cuadricula
+                                try:
+                                    int(numeros[0])
+                                    self.casillas[i][op].configure(text=numeros[0])
+                                    self.casillas[i][op].configure(state=tk.DISABLED)
+                                    self.valoresH[i][op] = int(numeros[0])
+                                    self.valoresV[op][i] = int(numeros[0])
+                                except:
+                                    # Si no se puede pues se evalua si es horizontal o vertical la restricción
+                                    if numeros[0] == 'v' or numeros[0] == 'ʌ':
+                                        self.restriccionesV[i][op].configure(text=numeros[0])
+                                        self.signoRestriccionesV[i][op] = numeros[0]
+                                    else:
+                                        self.restriccionesH[i][op].configure(text=numeros[0])
+                                        self.signoRestriccionesH[i][op] = numeros[0]
+
+        self.configuraciones = cargarPartida[3]
+
+        for x in cargarPartida[6]:
+            self.casillas[x[0]][x[1]].configure(text=x[2])
+            self.valoresH[x[0]][x[1]] = int(x[2])
+            self.valoresV[x[1]][x[0]] = int(x[2])
+        
+        self.matrizResultados = cargarPartida[6]
+
+        self.btnIniciarJuego.configure(state=tk.NORMAL)
+        self.btnBorrarJugada.configure(state=tk.DISABLED)
+        self.btnBorraJuego.configure(state=tk.DISABLED)
+        self.btnTerminarJuego.configure(state=tk.DISABLED)
+
+        if cargarPartida[1] == 3:
+            #TIMER
+            self.segundo = cargarPartida[7]
+            self.minuto = cargarPartida[8]
+            self.hora = cargarPartida[9]
+            self.configuraciones[3] = self.hora
+            self.configuraciones[4] = self.minuto
+            self.configuraciones[5] = self.segundo
+
+            self.secondLabel.configure(text=str(self.segundo))
+            self.minuteLabel.configure(text=str(self.minuto))
+            self.hourLabel.configure(text=str(self.hora))
+
+        elif cargarPartida[1] == 1:
+            #CRONOMETRO
+            self.segundoReloj = cargarPartida[7]
+            self.minutoReloj = cargarPartida[8]
+            self.horaReloj = cargarPartida[9]
+
+            self.secondLabel.configure(text=str(self.segundo))
+            self.minuteLabel.configure(text=str(self.minuto))
+            self.hourLabel.configure(text=str(self.hora))
+
+        cargarJuego.close()
+
 ##################################################################################################################################################
     def ayuda(self):
         # Esta opción la usaremos para que el usuario pueda ver el Manual de Usuario directamente en la computadora (despliega el pdf  respectivo). 
