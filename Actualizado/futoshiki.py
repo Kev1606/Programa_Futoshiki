@@ -52,6 +52,7 @@ class Configuracion:
         self.relojConfig = tk.IntVar()      #variable int de la configuración del reloj
         configure = open('futoshiki2021configuracion.dat','rb')
         configuracion = pickle.load(configure)
+        print(configuracion)
         self.relojConfig.set(str(configuracion[1]))
         
 
@@ -73,9 +74,13 @@ class Configuracion:
         self.second= tk.StringVar()
 
         #Se configura las variables en el valor default
-        self.hour.set(str(configuracion[3]))
-        self.minute.set(str(configuracion[4]))
-        self.second.set(str(configuracion[5]))
+        # print(configuracion)
+        # self.hour.set(str(configuracion[3]))
+        # self.minute.set(str(configuracion[4]))
+        # self.second.set(str(configuracion[5]))
+        self.hour.set("0")
+        self.minute.set("0")
+        self.second.set("0")
         configure.close()
         self.hourLabel = tk.Label(self.ventanaConfigurar,text='Horas',width=8,font=('System',12)).place(x=285,y=110)
         self.minuteLabel = tk.Label(self.ventanaConfigurar,text='Minutos',width=8,font=('System',12)).place(x=337,y=110)
